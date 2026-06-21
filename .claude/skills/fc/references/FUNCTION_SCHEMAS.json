@@ -1,0 +1,5624 @@
+{
+  "schema_version": "1.0",
+  "generated": "2026-06-11",
+  "description": "OpenAI Function Calling schemas for FreeCAD CLI",
+  "source": "docs/TOOL_SCHEMA.json",
+  "total_functions": 185,
+  "functions": [
+    {
+      "type": "function",
+      "function": {
+        "name": "document_new",
+        "description": "Create document Returns: name,path.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc document new --name MyPart --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "document_open",
+        "description": "Open .FCStd file Returns: doc info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "File path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "path"
+          ]
+        },
+        "example": "fc document open existing.FCStd --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "document_save",
+        "description": "Save document Returns: file path.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc document save --output backup.FCStd --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "document_info",
+        "description": "Show doc info Returns: name,label,count,file.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc document info --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "document_close",
+        "description": "Close document Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc document close --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "document_list",
+        "description": "List open docs (RPC) Returns: doc list.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc document list --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "part_add",
+        "description": "Create primitive Returns: name,type.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "BOX",
+                "CYL",
+                "SPHERE",
+                "CONE",
+                "TORUS",
+                "WEDGE",
+                "HELIX",
+                "ELLIPSOID",
+                "SPIRAL"
+              ],
+              "description": "Primitive type"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "position": {
+              "type": "string",
+              "description": "Position (x,y,z)"
+            },
+            "rotation": {
+              "type": "string",
+              "description": "Rotation axis (rx,ry,rz)"
+            },
+            "param": {
+              "type": "string",
+              "description": "Param (k=v)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        "example": "fc part add box --name B --param Length=20 --param Width=15 --param Height=10 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "part_remove",
+        "description": "Remove part Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc part remove B --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "part_list",
+        "description": "List parts Returns: objects.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc part list --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "part_get",
+        "description": "Get part details Returns: properties.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc part get B --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "part_transform",
+        "description": "Change position/rotation Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "position": {
+              "type": "string",
+              "description": "Position (x,y,z)"
+            },
+            "rotation": {
+              "type": "string",
+              "description": "Rotation axis (rx,ry,rz)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc part transform B --position 10,20,30 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "part_boolean",
+        "description": "Boolean operation Returns: result name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "op": {
+              "type": "string",
+              "enum": [
+                "CUT",
+                "FUSE",
+                "COMMON"
+              ],
+              "description": "Operation type"
+            },
+            "base": {
+              "type": "string",
+              "description": "Base object name"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool object name"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "op",
+            "base",
+            "tool"
+          ]
+        },
+        "example": "fc part boolean cut B C --name BH --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "part_copy",
+        "description": "Copy part Returns: new name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc part copy B --name BC --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "part_mirror",
+        "description": "Mirror part Returns: mirrored name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "plane": {
+              "type": "string",
+              "enum": [
+                "XY",
+                "XZ",
+                "YZ"
+              ],
+              "description": "Reference plane"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc part mirror B --plane XY --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "part_scale",
+        "description": "Scale part Returns: scaled name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "factor": {
+              "type": "string",
+              "enum": [
+                "FLOAT",
+                "x,y,z"
+              ],
+              "description": "Scale factor"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name",
+            "factor"
+          ]
+        },
+        "example": "fc part scale B 1.5 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "part_fillet_3d",
+        "description": "Fillet edges Returns: result name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "radius": {
+              "type": "number",
+              "description": "Radius in mm"
+            },
+            "edges": {
+              "type": "string",
+              "enum": [
+                "all",
+                "1,2,3"
+              ],
+              "description": "Edge selection (all or comma-separated indices)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc part fillet-3d B --radius 2 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "part_chamfer_3d",
+        "description": "Chamfer edges Returns: result name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "size": {
+              "type": "number",
+              "description": "Size in mm"
+            },
+            "edges": {
+              "type": "string",
+              "enum": [
+                "all",
+                "1,2,3"
+              ],
+              "description": "Edge selection (all or comma-separated indices)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc part chamfer-3d B --size 1.5 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "part_info",
+        "description": "Detailed info Returns: full properties.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc part info B --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "part_bounds",
+        "description": "Bounding box Returns: x_min,x_max,y_min,y_max,z_min,z_max.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc part bounds B --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "part_hole",
+        "description": "Create hole Returns: result name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "diameter": {
+              "type": "number",
+              "description": "Diameter in mm"
+            },
+            "depth": {
+              "type": "number",
+              "description": "Depth in mm"
+            },
+            "position": {
+              "type": "string",
+              "description": "Position (x,y,z)"
+            },
+            "direction": {
+              "type": "string",
+              "description": "Direction vector (x,y,z)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc part hole B --diameter 8 --depth 10 --position 5,5,0 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_new",
+        "description": "Create sketch Returns: sketch name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "plane": {
+              "type": "string",
+              "enum": [
+                "XY",
+                "XZ",
+                "YZ"
+              ],
+              "description": "Reference plane"
+            },
+            "offset": {
+              "type": "number",
+              "description": "Offset distance in mm"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc sketch new --name S --plane XY --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_add_line",
+        "description": "Add line Returns: geo index.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "start": {
+              "type": "string",
+              "description": "Start value"
+            },
+            "end": {
+              "type": "string",
+              "description": "End value"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "sketch"
+          ]
+        },
+        "example": "fc sketch add-line S --start 0,0 --end 10,0 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_add_circle",
+        "description": "Add circle Returns: geo index.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "center": {
+              "type": "string",
+              "description": "Center (x,y)"
+            },
+            "radius": {
+              "type": "number",
+              "description": "Radius in mm"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "sketch"
+          ]
+        },
+        "example": "fc sketch add-circle S --center 0,0 --radius 10 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_add_rect",
+        "description": "Add rectangle Returns: geo indices.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "corner": {
+              "type": "string",
+              "description": "Corner (x,y)"
+            },
+            "width": {
+              "type": "number",
+              "description": "Width in mm"
+            },
+            "height": {
+              "type": "number",
+              "description": "Height in mm"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "sketch"
+          ]
+        },
+        "example": "fc sketch add-rect S --corner 0,0 --width 20 --height 10 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_add_arc",
+        "description": "Add arc Returns: geo index.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "center": {
+              "type": "string",
+              "description": "Center (x,y)"
+            },
+            "radius": {
+              "type": "number",
+              "description": "Radius in mm"
+            },
+            "start_angle": {
+              "type": "number",
+              "description": "Start Angle (FLOAT)"
+            },
+            "end_angle": {
+              "type": "number",
+              "description": "End Angle (FLOAT)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "sketch"
+          ]
+        },
+        "example": "fc sketch add-arc S --center 0,0 --radius 10 --start-angle 0 --end-angle 180 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_add_ellipse",
+        "description": "Add ellipse Returns: geo index.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "center": {
+              "type": "string",
+              "description": "Center (x,y)"
+            },
+            "major_radius": {
+              "type": "number",
+              "description": "Major Radius (FLOAT)"
+            },
+            "minor_radius": {
+              "type": "number",
+              "description": "Minor Radius (FLOAT)"
+            },
+            "major_angle": {
+              "type": "number",
+              "description": "Major Angle (FLOAT)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "sketch"
+          ]
+        },
+        "example": "fc sketch add-ellipse S --center 0,0 --major-radius 10 --minor-radius 5 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_add_polygon",
+        "description": "Add polygon Returns: geo indices.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "center": {
+              "type": "string",
+              "description": "Center (x,y)"
+            },
+            "radius": {
+              "type": "number",
+              "description": "Radius in mm"
+            },
+            "sides": {
+              "type": "integer",
+              "description": "Sides (INT)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "sketch"
+          ]
+        },
+        "example": "fc sketch add-polygon S --center 0,0 --radius 10 --sides 6 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_add_bspline",
+        "description": "Add B-spline Returns: geo index.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "points": {
+              "type": "string",
+              "description": "Points (x,y;x,y;...)"
+            },
+            "closed": {
+              "type": "string",
+              "description": "Close wire (flag)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "sketch"
+          ]
+        },
+        "example": "fc sketch add-bspline S --points 0,0;10,5;20,0 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_add_slot",
+        "description": "Add slot Returns: geo index.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "center": {
+              "type": "string",
+              "description": "Center (x,y)"
+            },
+            "length": {
+              "type": "number",
+              "description": "Length in mm"
+            },
+            "width": {
+              "type": "number",
+              "description": "Width in mm"
+            },
+            "angle": {
+              "type": "number",
+              "description": "Angle in degrees"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "sketch"
+          ]
+        },
+        "example": "fc sketch add-slot S --center 0,0 --length 20 --width 5 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_add_point",
+        "description": "Add point Returns: geo index.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "position": {
+              "type": "string",
+              "description": "Position (x,y)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "sketch"
+          ]
+        },
+        "example": "fc sketch add-point S --position 5,5 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_constrain",
+        "description": "Add constraint Returns: constraint info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "type": {
+              "type": "string",
+              "description": "Primitive type"
+            },
+            "elements": {
+              "type": "string",
+              "description": "Elements (INT,INT)"
+            },
+            "value": {
+              "type": "number",
+              "description": "Cell value"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "sketch",
+            "type"
+          ]
+        },
+        "example": "fc sketch constrain S horizontal --elements 0 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_close",
+        "description": "Close sketch Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "sketch"
+          ]
+        },
+        "example": "fc sketch close S --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_list",
+        "description": "List sketches Returns: sketch list.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc sketch list --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_get",
+        "description": "Get sketch details Returns: geo count,constraints.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc sketch get S --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_validate",
+        "description": "Validate sketch Returns: valid,issues.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc sketch validate S --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_solve_status",
+        "description": "Solve status Returns: solver_status,DOF.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc sketch solve-status S --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_delete_geom",
+        "description": "Delete geometry Returns: deleted count.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "indices": {
+              "type": "string",
+              "description": "Indices (INT,INT,...)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "sketch",
+            "indices"
+          ]
+        },
+        "example": "fc sketch delete-geom S 0,2,4 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_trim",
+        "description": "Trim geometry Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "geom_index": {
+              "type": "integer",
+              "description": "Geom Index (INT)"
+            },
+            "point": {
+              "type": "string",
+              "description": "Point (x,y)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "sketch",
+            "geom_index"
+          ]
+        },
+        "example": "fc sketch trim S 0 --point 5,0 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_mirror",
+        "description": "Mirror geometry Returns: mirrored count.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "elements": {
+              "type": "string",
+              "description": "Elements (INT,INT)"
+            },
+            "axis": {
+              "type": "string",
+              "enum": [
+                "x",
+                "y"
+              ],
+              "description": "Axis (x|y)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "sketch"
+          ]
+        },
+        "example": "fc sketch mirror S --elements 0,1,2 --axis x --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_clone",
+        "description": "Clone geometry Returns: cloned count.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "elements": {
+              "type": "string",
+              "description": "Elements (INT,INT)"
+            },
+            "offset": {
+              "type": "string",
+              "description": "Offset distance in mm"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "sketch"
+          ]
+        },
+        "example": "fc sketch clone S --elements 0,1 --offset 20,0 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "sketch_export",
+        "description": "Export to DXF Returns: file path.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "overwrite": {
+              "type": "string",
+              "description": "Overwrite existing file (flag)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "sketch"
+          ]
+        },
+        "example": "fc sketch export S --output sketch.dxf --overwrite --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_new",
+        "description": "Create body Returns: body name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc body new --name Body --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_pad",
+        "description": "Extrude sketch Returns: feature name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "description": "Body (STR)"
+            },
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "length": {
+              "type": "number",
+              "description": "Length in mm"
+            },
+            "symmetric": {
+              "type": "string",
+              "description": "Symmetric extent (flag)"
+            },
+            "reversed": {
+              "type": "string",
+              "description": "Reverse direction (flag)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "body",
+            "sketch"
+          ]
+        },
+        "example": "fc body pad Body Sketch --length 20 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_pocket",
+        "description": "Cut extrusion Returns: feature name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "description": "Body (STR)"
+            },
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "length": {
+              "type": "number",
+              "description": "Length in mm"
+            },
+            "symmetric": {
+              "type": "string",
+              "description": "Symmetric extent (flag)"
+            },
+            "reversed": {
+              "type": "string",
+              "description": "Reverse direction (flag)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "body",
+            "sketch"
+          ]
+        },
+        "example": "fc body pocket Body Sketch --length 5 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_fillet",
+        "description": "Fillet feature Returns: feature name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "description": "Body (STR)"
+            },
+            "radius": {
+              "type": "number",
+              "description": "Radius in mm"
+            },
+            "edges": {
+              "type": "string",
+              "enum": [
+                "all",
+                "INT,INT"
+              ],
+              "description": "Edge selection (all or comma-separated indices)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "body"
+          ]
+        },
+        "example": "fc body fillet Body --radius 2 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_chamfer",
+        "description": "Chamfer feature Returns: feature name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "description": "Body (STR)"
+            },
+            "size": {
+              "type": "number",
+              "description": "Size in mm"
+            },
+            "edges": {
+              "type": "string",
+              "enum": [
+                "all",
+                "INT,INT"
+              ],
+              "description": "Edge selection (all or comma-separated indices)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "body"
+          ]
+        },
+        "example": "fc body chamfer Body --size 1.5 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_revolution",
+        "description": "Revolve sketch Returns: feature name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "description": "Body (STR)"
+            },
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "angle": {
+              "type": "number",
+              "description": "Angle in degrees"
+            },
+            "axis": {
+              "type": "string",
+              "enum": [
+                "X",
+                "Y",
+                "Z"
+              ],
+              "description": "Axis (X|Y|Z)"
+            },
+            "reversed": {
+              "type": "string",
+              "description": "Reverse direction (flag)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "body",
+            "sketch"
+          ]
+        },
+        "example": "fc body revolution Body Sketch --angle 360 --axis Z --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_groove",
+        "description": "Groove Returns: feature name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "description": "Body (STR)"
+            },
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "angle": {
+              "type": "number",
+              "description": "Angle in degrees"
+            },
+            "axis": {
+              "type": "string",
+              "enum": [
+                "X",
+                "Y",
+                "Z"
+              ],
+              "description": "Axis (X|Y|Z)"
+            },
+            "reversed": {
+              "type": "string",
+              "description": "Reverse direction (flag)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "body",
+            "sketch"
+          ]
+        },
+        "example": "fc body groove Body Sketch --angle 360 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_hole",
+        "description": "Hole feature Returns: feature name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "description": "Body (STR)"
+            },
+            "sketch": {
+              "type": "string",
+              "description": "Sketch name"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "SIMPLE",
+                "COUNTERBORE",
+                "COUNTERSINK",
+                "THREADED"
+              ],
+              "description": "Primitive type"
+            },
+            "diameter": {
+              "type": "number",
+              "description": "Diameter in mm"
+            },
+            "depth": {
+              "type": "number",
+              "description": "Depth in mm"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "body",
+            "sketch"
+          ]
+        },
+        "example": "fc body hole Body HS --diameter 8 --depth 10 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_pattern_linear",
+        "description": "Linear pattern Returns: pattern name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "description": "Body (STR)"
+            },
+            "feature": {
+              "type": "string",
+              "description": "Feature (STR)"
+            },
+            "direction": {
+              "type": "string",
+              "enum": [
+                "X",
+                "Y",
+                "Z"
+              ],
+              "description": "Direction vector (x,y,z)"
+            },
+            "count": {
+              "type": "integer",
+              "description": "Number of items"
+            },
+            "spacing": {
+              "type": "number",
+              "description": "Spacing in mm"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "body",
+            "feature"
+          ]
+        },
+        "example": "fc body pattern-linear Body Hole --direction X --count 3 --spacing 10 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_pattern_polar",
+        "description": "Polar pattern Returns: pattern name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "description": "Body (STR)"
+            },
+            "feature": {
+              "type": "string",
+              "description": "Feature (STR)"
+            },
+            "axis": {
+              "type": "string",
+              "enum": [
+                "X",
+                "Y",
+                "Z"
+              ],
+              "description": "Axis (X|Y|Z)"
+            },
+            "count": {
+              "type": "integer",
+              "description": "Number of items"
+            },
+            "angle": {
+              "type": "number",
+              "description": "Angle in degrees"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "body",
+            "feature"
+          ]
+        },
+        "example": "fc body pattern-polar Body Hole --axis Z --count 6 --angle 360 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_pattern_mirror",
+        "description": "Mirror pattern Returns: pattern name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "description": "Body (STR)"
+            },
+            "feature": {
+              "type": "string",
+              "description": "Feature (STR)"
+            },
+            "plane": {
+              "type": "string",
+              "enum": [
+                "XY",
+                "XZ",
+                "YZ"
+              ],
+              "description": "Reference plane"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "body",
+            "feature"
+          ]
+        },
+        "example": "fc body pattern-mirror Body Hole --plane XY --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_shell",
+        "description": "Shell solid Returns: feature name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "description": "Body (STR)"
+            },
+            "thickness": {
+              "type": "number",
+              "description": "Thickness in mm"
+            },
+            "faces": {
+              "type": "string",
+              "description": "Face selection (all or comma-separated indices)"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "body"
+          ]
+        },
+        "example": "fc body shell Body --thickness 2 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_draft",
+        "description": "Draft angle Returns: feature name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "description": "Body (STR)"
+            },
+            "angle": {
+              "type": "number",
+              "description": "Angle in degrees"
+            },
+            "faces": {
+              "type": "string",
+              "description": "Face selection (all or comma-separated indices)"
+            },
+            "plane": {
+              "type": "string",
+              "enum": [
+                "XY",
+                "XZ",
+                "YZ"
+              ],
+              "description": "Reference plane"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "body"
+          ]
+        },
+        "example": "fc body draft Body --angle 5 --faces 0,1 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_datum_plane",
+        "description": "Reference plane Returns: datum name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "description": "Body (STR)"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "plane": {
+              "type": "string",
+              "enum": [
+                "XY",
+                "XZ",
+                "YZ"
+              ],
+              "description": "Reference plane"
+            },
+            "offset": {
+              "type": "number",
+              "description": "Offset distance in mm"
+            },
+            "rotation": {
+              "type": "string",
+              "description": "Rotation axis (rx,ry,rz)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "body"
+          ]
+        },
+        "example": "fc body datum-plane Body --name DP --plane XY --offset 10 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_datum_point",
+        "description": "Reference point Returns: datum name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "description": "Body (STR)"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "position": {
+              "type": "string",
+              "description": "Position (x,y,z)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "body"
+          ]
+        },
+        "example": "fc body datum-point Body --name DPT --position 0,0,0 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_datum_line",
+        "description": "Reference line Returns: datum name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "description": "Body (STR)"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "direction": {
+              "type": "string",
+              "enum": [
+                "X",
+                "Y",
+                "Z"
+              ],
+              "description": "Direction vector (x,y,z)"
+            },
+            "position": {
+              "type": "string",
+              "description": "Position (x,y,z)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "body"
+          ]
+        },
+        "example": "fc body datum-line Body --name DL --direction Z --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_set_tip",
+        "description": "Set tip Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "description": "Body (STR)"
+            },
+            "feature": {
+              "type": "string",
+              "description": "Feature (STR)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "body"
+          ]
+        },
+        "example": "fc body set-tip Body --feature Pad --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_remove_feature",
+        "description": "Remove feature Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string",
+              "description": "Body (STR)"
+            },
+            "feature": {
+              "type": "string",
+              "description": "Feature (STR)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "body",
+            "feature"
+          ]
+        },
+        "example": "fc body remove-feature Body Fillet --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_list",
+        "description": "List bodies Returns: body list.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc body list --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "body_get",
+        "description": "Get body details Returns: features list.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc body get Body --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "export_step",
+        "description": "Export STEP Returns: file,size.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "overwrite": {
+              "type": "string",
+              "description": "Overwrite existing file (flag)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "output"
+          ]
+        },
+        "example": "fc export step model.step --overwrite --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "export_stl",
+        "description": "Export STL Returns: file,size.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "overwrite": {
+              "type": "string",
+              "description": "Overwrite existing file (flag)"
+            },
+            "tolerance": {
+              "type": "number",
+              "description": "Tolerance value"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "output"
+          ]
+        },
+        "example": "fc export stl model.stl --tolerance 0.05 --overwrite --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "export_obj",
+        "description": "Export OBJ Returns: file.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "overwrite": {
+              "type": "string",
+              "description": "Overwrite existing file (flag)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "output"
+          ]
+        },
+        "example": "fc export obj model.obj --overwrite --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "export_brep",
+        "description": "Export BREP Returns: file.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "overwrite": {
+              "type": "string",
+              "description": "Overwrite existing file (flag)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "output"
+          ]
+        },
+        "example": "fc export brep model.brep --overwrite --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "export_dxf",
+        "description": "Export DXF Returns: file.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "overwrite": {
+              "type": "string",
+              "description": "Overwrite existing file (flag)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "output"
+          ]
+        },
+        "example": "fc export dxf model.dxf --overwrite --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "export_svg",
+        "description": "Export SVG Returns: file.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "overwrite": {
+              "type": "string",
+              "description": "Overwrite existing file (flag)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "output"
+          ]
+        },
+        "example": "fc export svg model.svg --overwrite --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "export_pdf",
+        "description": "Export PDF Returns: file.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "overwrite": {
+              "type": "string",
+              "description": "Overwrite existing file (flag)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "output"
+          ]
+        },
+        "example": "fc export pdf drawing.pdf --overwrite --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "export_gltf",
+        "description": "Export glTF Returns: file.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "overwrite": {
+              "type": "string",
+              "description": "Overwrite existing file (flag)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "output"
+          ]
+        },
+        "example": "fc export gltf model.gltf --overwrite --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "export_3mf",
+        "description": "Export 3MF Returns: file.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "overwrite": {
+              "type": "string",
+              "description": "Overwrite existing file (flag)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "output"
+          ]
+        },
+        "example": "fc export 3mf model.3mf --overwrite --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "export_fcstd",
+        "description": "Save .FCStd Returns: file.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "overwrite": {
+              "type": "string",
+              "description": "Overwrite existing file (flag)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "output"
+          ]
+        },
+        "example": "fc export fcstd model.FCStd --overwrite --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "export_iges",
+        "description": "Export IGES Returns: file,size.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "objects": {
+              "type": "string",
+              "description": "Objects (STR,STR)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "output"
+          ]
+        },
+        "example": "fc export iges model.iges --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "export_off",
+        "description": "Export OFF Returns: file.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "output"
+          ]
+        },
+        "example": "fc export off model.off --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "export_ply",
+        "description": "Export PLY Returns: file.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "output"
+          ]
+        },
+        "example": "fc export ply model.ply --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "export_presets",
+        "description": "List presets Returns: presets dict.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc export presets --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "import_auto",
+        "description": "Auto-detect import Returns: import info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "File path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "path"
+          ]
+        },
+        "example": "fc import auto model.step --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "import_step",
+        "description": "Import STEP Returns: import info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "File path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "path"
+          ]
+        },
+        "example": "fc import step model.step --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "import_stl",
+        "description": "Import STL Returns: mesh info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "File path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "path"
+          ]
+        },
+        "example": "fc import stl mesh.stl --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "import_obj",
+        "description": "Import OBJ Returns: mesh info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "File path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "path"
+          ]
+        },
+        "example": "fc import obj mesh.obj --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "import_dxf",
+        "description": "Import DXF Returns: import info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "File path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "path"
+          ]
+        },
+        "example": "fc import dxf drawing.dxf --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "import_brep",
+        "description": "Import BREP Returns: import info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "File path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "path"
+          ]
+        },
+        "example": "fc import brep shape.brep --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "import_iges",
+        "description": "Import IGES Returns: import info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "File path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "path"
+          ]
+        },
+        "example": "fc import iges model.iges --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "import_svg",
+        "description": "Import SVG Returns: import info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "File path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "path"
+          ]
+        },
+        "example": "fc import svg drawing.svg --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "import_3mf",
+        "description": "Import 3MF Returns: mesh info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "File path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "path"
+          ]
+        },
+        "example": "fc import 3mf model.3mf --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "import_ply",
+        "description": "Import PLY Returns: mesh info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "File path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "path"
+          ]
+        },
+        "example": "fc import ply mesh.ply --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "import_info",
+        "description": "File info Returns: format,size,mesh.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "File path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "path"
+          ]
+        },
+        "example": "fc import info model.stl --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "session_undo",
+        "description": "Undo Returns: undo count.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "steps": {
+              "type": "integer",
+              "description": "Number of steps"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc session undo --steps 1 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "session_redo",
+        "description": "Redo Returns: redo count.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "steps": {
+              "type": "integer",
+              "description": "Number of steps"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc session redo --steps 1 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "session_status",
+        "description": "Session status Returns: backend,project,doc.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc session status --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "session_history",
+        "description": "Operation history Returns: operations.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "description": "Limit (INT)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc session history --limit 20 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "session_snapshot",
+        "description": "Create snapshot Returns: metadata.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "description": {
+              "type": "string",
+              "description": "Description text"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc session snapshot v1.0 --description Initial --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "session_restore",
+        "description": "Restore snapshot Returns: metadata.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc session restore v1.0 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "execute_code",
+        "description": "Execute code Returns: result.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "Code (STR)"
+            },
+            "timeout": {
+              "type": "integer",
+              "description": "Timeout in seconds"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "code"
+          ]
+        },
+        "example": "fc execute code print(1) --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "execute_file",
+        "description": "Execute file Returns: result.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "File path"
+            },
+            "timeout": {
+              "type": "integer",
+              "description": "Timeout in seconds"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "path"
+          ]
+        },
+        "example": "fc execute file macro.py --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "mesh_import",
+        "description": "Import mesh Returns: mesh info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "File path"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "path"
+          ]
+        },
+        "example": "fc mesh import model.stl --name M --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "mesh_export",
+        "description": "Export mesh Returns: export info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "format": {
+              "type": "string",
+              "enum": [
+                "STL",
+                "OBJ",
+                "PLY",
+                "OFF"
+              ],
+              "description": "File format"
+            },
+            "tolerance": {
+              "type": "number",
+              "description": "Tolerance value"
+            },
+            "overwrite": {
+              "type": "string",
+              "description": "Overwrite existing file (flag)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "output"
+          ]
+        },
+        "example": "fc mesh export out.stl --format stl --overwrite --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "mesh_analyze",
+        "description": "Analyze quality Returns: quality metrics.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc mesh analyze --name M --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "mesh_repair",
+        "description": "Repair defects Returns: repair results.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "fix_degenerates": {
+              "type": "string",
+              "description": "Fix degenerate mesh elements (flag)"
+            },
+            "fix_duplicates": {
+              "type": "string",
+              "description": "Fix duplicate mesh elements (flag)"
+            },
+            "fix_normals": {
+              "type": "string",
+              "description": "Fix mesh normals (flag)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc mesh repair --name M --fix-degenerates --fix-duplicates --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "mesh_refine",
+        "description": "Subdivide mesh Returns: facet counts.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "iterations": {
+              "type": "integer",
+              "description": "Number of iterations"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc mesh refine --name M --iterations 2 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "mesh_decimate",
+        "description": "Reduce polygons Returns: reduction ratio.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "reduction": {
+              "type": "number",
+              "description": "Reduction ratio (0.0-1.0)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc mesh decimate --name M --reduction 0.5 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "mesh_boolean",
+        "description": "Mesh boolean Returns: result info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "op": {
+              "type": "string",
+              "enum": [
+                "CUT",
+                "FUSE",
+                "COMMON"
+              ],
+              "description": "Operation type"
+            },
+            "base": {
+              "type": "string",
+              "description": "Base object name"
+            },
+            "tool": {
+              "type": "string",
+              "description": "Tool object name"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "op",
+            "base",
+            "tool"
+          ]
+        },
+        "example": "fc mesh boolean fuse M1 M2 --name F --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "mesh_section",
+        "description": "Cross-section Returns: section data.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "plane": {
+              "type": "string",
+              "enum": [
+                "XY",
+                "XZ",
+                "YZ"
+              ],
+              "description": "Reference plane"
+            },
+            "offset": {
+              "type": "number",
+              "description": "Offset distance in mm"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc mesh section --name M --plane XY --offset 5 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "mesh_list",
+        "description": "List meshes Returns: mesh list.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc mesh list --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "mesh_info",
+        "description": "Mesh info Returns: detailed info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc mesh info M --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "mesh_create",
+        "description": "Create primitive Returns: mesh info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "CUBE",
+                "SPHERE",
+                "CYLINDER"
+              ],
+              "description": "Primitive type"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "size": {
+              "type": "number",
+              "description": "Size in mm"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        "example": "fc mesh create cube --name MC --size 10 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "mesh_evaluate",
+        "description": "Evaluate quality Returns: quality.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc mesh evaluate M --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "mesh_flip_normals",
+        "description": "Flip normals Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc mesh flip-normals M --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "mesh_smooth",
+        "description": "Smooth mesh Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "iterations": {
+              "type": "integer",
+              "description": "Number of iterations"
+            },
+            "factor": {
+              "type": "number",
+              "description": "Scale factor"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc mesh smooth M --iterations 3 --factor 0.5 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "draft_line",
+        "description": "Create line Returns: name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "start": {
+              "type": "string",
+              "description": "Start value"
+            },
+            "end": {
+              "type": "string",
+              "description": "End value"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc draft line --start 0,0,0 --end 10,0,0 --name L --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "draft_wire",
+        "description": "Create wire Returns: name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "points": {
+              "type": "string",
+              "description": "Points (x,y,z;x,y,z;...)"
+            },
+            "closed": {
+              "type": "string",
+              "description": "Close wire (flag)"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc draft wire --points 0,0,0;10,0,0;10,10,0 --closed --name W --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "draft_circle",
+        "description": "Create circle Returns: name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "center": {
+              "type": "string",
+              "description": "Center (x,y,z)"
+            },
+            "radius": {
+              "type": "number",
+              "description": "Radius in mm"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc draft circle --center 0,0,0 --radius 5 --name C --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "draft_arc",
+        "description": "Create arc Returns: name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "center": {
+              "type": "string",
+              "description": "Center (x,y,z)"
+            },
+            "radius": {
+              "type": "number",
+              "description": "Radius in mm"
+            },
+            "start_angle": {
+              "type": "number",
+              "description": "Start Angle (FLOAT)"
+            },
+            "end_angle": {
+              "type": "number",
+              "description": "End Angle (FLOAT)"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc draft arc --center 0,0,0 --radius 10 --start-angle 0 --end-angle 180 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "draft_rect",
+        "description": "Create rectangle Returns: name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "corner": {
+              "type": "string",
+              "description": "Corner (x,y,z)"
+            },
+            "width": {
+              "type": "number",
+              "description": "Width in mm"
+            },
+            "height": {
+              "type": "number",
+              "description": "Height in mm"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc draft rect --corner 0,0,0 --width 20 --height 10 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "draft_polygon",
+        "description": "Create polygon Returns: name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "center": {
+              "type": "string",
+              "description": "Center (x,y,z)"
+            },
+            "radius": {
+              "type": "number",
+              "description": "Radius in mm"
+            },
+            "sides": {
+              "type": "integer",
+              "description": "Sides (INT)"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc draft polygon --center 0,0,0 --radius 10 --sides 6 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "draft_text",
+        "description": "Create text Returns: name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Text content"
+            },
+            "position": {
+              "type": "string",
+              "description": "Position (x,y,z)"
+            },
+            "size": {
+              "type": "number",
+              "description": "Size in mm"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "text"
+          ]
+        },
+        "example": "fc draft text Hello --position 0,0,0 --size 5 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "draft_dimension",
+        "description": "Create dimension Returns: name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "start": {
+              "type": "string",
+              "description": "Start value"
+            },
+            "end": {
+              "type": "string",
+              "description": "End value"
+            },
+            "offset": {
+              "type": "string",
+              "description": "Offset distance in mm"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc draft dimension --start 0,0,0 --end 10,0,0 --offset 0,5,0 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "draft_array",
+        "description": "Create array Returns: array name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "POLAR",
+                "RECTANGULAR"
+              ],
+              "description": "Primitive type"
+            },
+            "count": {
+              "type": "integer",
+              "description": "Number of items"
+            },
+            "rows": {
+              "type": "integer",
+              "description": "Rows (INT)"
+            },
+            "cols": {
+              "type": "integer",
+              "description": "Cols (INT)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc draft array C --type polar --count 6 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "draft_offset",
+        "description": "Create offset Returns: offset name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "distance": {
+              "type": "number",
+              "description": "Distance in mm"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc draft offset C --distance 2 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "draft_move",
+        "description": "Move object Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "vector": {
+              "type": "string",
+              "description": "Vector (x,y,z)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc draft move L --vector 10,0,0 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "draft_rotate",
+        "description": "Rotate object Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "angle": {
+              "type": "number",
+              "description": "Angle in degrees"
+            },
+            "center": {
+              "type": "string",
+              "description": "Center (x,y,z)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc draft rotate L --angle 45 --center 0,0,0 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "draft_scale",
+        "description": "Scale object Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "factor": {
+              "type": "number",
+              "description": "Scale factor"
+            },
+            "center": {
+              "type": "string",
+              "description": "Center (x,y,z)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc draft scale C --factor 1.5 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "draft_trim",
+        "description": "Trim geometry Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "edge": {
+              "type": "integer",
+              "description": "Edge (INT)"
+            },
+            "point": {
+              "type": "string",
+              "description": "Point (x,y,z)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc draft trim L --edge 0 --point 5,0 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "draft_list",
+        "description": "List objects Returns: object list.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc draft list --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "surface_loft",
+        "description": "Loft profiles Returns: loft name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "profiles": {
+              "type": "string",
+              "description": "Profiles (STR;STR)"
+            },
+            "solid": {
+              "type": "string",
+              "description": "Create solid (flag)"
+            },
+            "ruled": {
+              "type": "string",
+              "description": "Ruled surface (flag)"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc surface loft --profiles S1;S2 --solid --name L --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "surface_sweep",
+        "description": "Sweep along path Returns: sweep name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "profile": {
+              "type": "string",
+              "description": "Profile (STR)"
+            },
+            "path": {
+              "type": "string",
+              "description": "File path"
+            },
+            "solid": {
+              "type": "string",
+              "description": "Create solid (flag)"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc surface sweep --profile S --path P --name SW --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "surface_fill",
+        "description": "Fill boundary Returns: fill name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "edges": {
+              "type": "string",
+              "description": "Edge selection (all or comma-separated indices)"
+            },
+            "degree": {
+              "type": "integer",
+              "description": "Degree (INT)"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc surface fill --edges B.Edge1;B.Edge2 --name F --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "surface_pipe",
+        "description": "Pipe surface Returns: pipe name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "File path"
+            },
+            "radius": {
+              "type": "number",
+              "description": "Radius in mm"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc surface pipe --path P --radius 2 --name PI --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "surface_offset",
+        "description": "Offset surface Returns: offset name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "distance": {
+              "type": "number",
+              "description": "Distance in mm"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc surface offset S --distance 2 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "surface_thicken",
+        "description": "Thicken to solid Returns: solid name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "thickness": {
+              "type": "number",
+              "description": "Thickness in mm"
+            },
+            "direction": {
+              "type": "string",
+              "enum": [
+                "BOTH",
+                "SINGLE"
+              ],
+              "description": "Direction vector (x,y,z)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc surface thicken S --thickness 2 --name T --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "surface_flatten",
+        "description": "Flatten surface Returns: flattened name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "tolerance": {
+              "type": "number",
+              "description": "Tolerance value"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc surface flatten S --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "surface_sew",
+        "description": "Sew surfaces Returns: sewn name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "objects": {
+              "type": "string",
+              "description": "Objects (STR;STR)"
+            },
+            "tolerance": {
+              "type": "number",
+              "description": "Tolerance value"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc surface sew --objects S1;S2 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "surface_list",
+        "description": "List surfaces Returns: surface list.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc surface list --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "techdraw_page",
+        "description": "Create page Returns: page name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "template": {
+              "type": "string",
+              "description": "Template path"
+            },
+            "format": {
+              "type": "string",
+              "enum": [
+                "A4",
+                "A3",
+                "A2",
+                "A1",
+                "A0"
+              ],
+              "description": "File format"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc techdraw page --name P1 --format A3 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "techdraw_view",
+        "description": "Add view Returns: view name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "string",
+              "description": "Page name"
+            },
+            "source": {
+              "type": "string",
+              "description": "Source object name"
+            },
+            "direction": {
+              "type": "string",
+              "description": "Direction vector (x,y,z)"
+            },
+            "scale": {
+              "type": "number",
+              "description": "Scale (FLOAT)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc techdraw view --page P1 --source B --direction 0,0,1 --scale 1.0 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "techdraw_dimension",
+        "description": "Add dimension Returns: dimension name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "view": {
+              "type": "string",
+              "description": "View name"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "DISTANCE",
+                "RADIUS",
+                "DIAMETER",
+                "ANGLE"
+              ],
+              "description": "Primitive type"
+            },
+            "elements": {
+              "type": "string",
+              "description": "Elements (INT,INT)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc techdraw dimension --view V --type distance --elements 0,1 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "techdraw_annotation",
+        "description": "Add annotation Returns: annotation name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "string",
+              "description": "Page name"
+            },
+            "text": {
+              "type": "string",
+              "description": "Text content"
+            },
+            "position": {
+              "type": "string",
+              "description": "Position (x,y)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc techdraw annotation --page P1 --text Title --position 10,10 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "techdraw_symbol",
+        "description": "Add symbol Returns: symbol name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "string",
+              "description": "Page name"
+            },
+            "symbol": {
+              "type": "string",
+              "description": "Symbol (PATH)"
+            },
+            "position": {
+              "type": "string",
+              "description": "Position (x,y)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc techdraw symbol --page P1 --symbol sym.svg --position 50,50 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "techdraw_export",
+        "description": "Export page Returns: file path.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "page": {
+              "type": "string",
+              "description": "Page name"
+            },
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "format": {
+              "type": "string",
+              "enum": [
+                "SVG",
+                "PDF"
+              ],
+              "description": "File format"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "page"
+          ]
+        },
+        "example": "fc techdraw export P1 --output drawing.pdf --format pdf --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "techdraw_list",
+        "description": "List pages Returns: page list.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc techdraw list --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "techdraw_get",
+        "description": "Get page details Returns: page info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc techdraw get P1 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "spreadsheet_create",
+        "description": "Create spreadsheet Returns: name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc spreadsheet create --name Params --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "spreadsheet_set",
+        "description": "Set cell value Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sheet": {
+              "type": "string",
+              "description": "Spreadsheet name"
+            },
+            "cell": {
+              "type": "string",
+              "description": "Cell reference (e.g., A1)"
+            },
+            "value": {
+              "type": "string",
+              "description": "Cell value"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc spreadsheet set --sheet Params --cell A1 --value 100 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "spreadsheet_get",
+        "description": "Get cell value Returns: value.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sheet": {
+              "type": "string",
+              "description": "Spreadsheet name"
+            },
+            "cell": {
+              "type": "string",
+              "description": "Cell reference (e.g., A1)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc spreadsheet get --sheet Params --cell A1 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "spreadsheet_formula",
+        "description": "Set formula Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sheet": {
+              "type": "string",
+              "description": "Spreadsheet name"
+            },
+            "cell": {
+              "type": "string",
+              "description": "Cell reference (e.g., A1)"
+            },
+            "formula": {
+              "type": "string",
+              "description": "Cell formula"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc spreadsheet formula --sheet Params --cell B1 --formula =A1*2 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "spreadsheet_alias",
+        "description": "Set alias Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sheet": {
+              "type": "string",
+              "description": "Spreadsheet name"
+            },
+            "cell": {
+              "type": "string",
+              "description": "Cell reference (e.g., A1)"
+            },
+            "alias": {
+              "type": "string",
+              "description": "Cell alias"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc spreadsheet alias --sheet Params --cell A1 --alias Length --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "spreadsheet_link",
+        "description": "Link to property Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sheet": {
+              "type": "string",
+              "description": "Spreadsheet name"
+            },
+            "cell": {
+              "type": "string",
+              "description": "Cell reference (e.g., A1)"
+            },
+            "object": {
+              "type": "string",
+              "description": "Object name"
+            },
+            "property": {
+              "type": "string",
+              "description": "Property name"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc spreadsheet link --sheet Params --cell A1 --object Box --property Length --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "spreadsheet_show",
+        "description": "Show contents Returns: cell values.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sheet": {
+              "type": "string",
+              "description": "Spreadsheet name"
+            },
+            "range": {
+              "type": "string",
+              "description": "Cell range (e.g., A1:C10)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc spreadsheet show --sheet Params --range A1:C10 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "spreadsheet_list",
+        "description": "List sheets Returns: sheet list.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc spreadsheet list --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "spreadsheet_clear",
+        "description": "Clear cells Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sheet": {
+              "type": "string",
+              "description": "Spreadsheet name"
+            },
+            "cell": {
+              "type": "string",
+              "description": "Cell reference (e.g., A1)"
+            },
+            "range": {
+              "type": "string",
+              "description": "Cell range (e.g., A1:C10)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc spreadsheet clear --sheet Params --cell A1 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "spreadsheet_export",
+        "description": "Export CSV Returns: file path.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sheet": {
+              "type": "string",
+              "description": "Spreadsheet name"
+            },
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc spreadsheet export --sheet Params --output params.csv --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "spreadsheet_import",
+        "description": "Import CSV Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sheet": {
+              "type": "string",
+              "description": "Spreadsheet name"
+            },
+            "input": {
+              "type": "string",
+              "description": "Input file path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc spreadsheet import --sheet Params --input params.csv --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "material_list",
+        "description": "List materials Returns: material list.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "library": {
+              "type": "string",
+              "description": "Library name"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc material list --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "material_show",
+        "description": "Show properties Returns: properties.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc material show Steel --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "material_assign",
+        "description": "Assign material Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "object": {
+              "type": "string",
+              "description": "Object name"
+            },
+            "material": {
+              "type": "string",
+              "description": "Material name"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc material assign --object Box --material Steel --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "material_create",
+        "description": "Create material Returns: name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "density": {
+              "type": "number",
+              "description": "Density (FLOAT)"
+            },
+            "youngs_modulus": {
+              "type": "number",
+              "description": "Youngs Modulus (FLOAT)"
+            },
+            "poisson_ratio": {
+              "type": "number",
+              "description": "Poisson Ratio (FLOAT)"
+            },
+            "color": {
+              "type": "string",
+              "description": "Color (R,G,B)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc material create --name MS --density 7850 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "material_edit",
+        "description": "Edit material Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "property": {
+              "type": "string",
+              "description": "Property name"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc material edit MS --property Density=7900 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "material_remove",
+        "description": "Remove material Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc material remove MS --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "material_library",
+        "description": "List libraries Returns: libraries.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc material library --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "material_export",
+        "description": "Export card Returns: file path.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "example": "fc material export Steel --output steel.json --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "material_import",
+        "description": "Import card Returns: name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "File path"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "path"
+          ]
+        },
+        "example": "fc material import steel.json --name Steel --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "assembly_create",
+        "description": "Create assembly Returns: name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "A2PLUS",
+                "A4",
+                "ASM3"
+              ],
+              "description": "Primitive type"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc assembly create --name Main --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "assembly_add",
+        "description": "Add part Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "assembly": {
+              "type": "string",
+              "description": "Assembly name"
+            },
+            "object": {
+              "type": "string",
+              "description": "Object name"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc assembly add --assembly Main --object Base --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "assembly_remove",
+        "description": "Remove part Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "assembly": {
+              "type": "string",
+              "description": "Assembly name"
+            },
+            "object": {
+              "type": "string",
+              "description": "Object name"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc assembly remove --assembly Main --object Base --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "assembly_constraint",
+        "description": "Add constraint Returns: constraint info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "COINCIDENT",
+                "PARALLEL",
+                "DISTANCE",
+                "ANGLE",
+                "AXIAL",
+                "PLANE"
+              ],
+              "description": "Primitive type"
+            },
+            "obj1": {
+              "type": "string",
+              "description": "Obj1 (STR)"
+            },
+            "obj2": {
+              "type": "string",
+              "description": "Obj2 (STR)"
+            },
+            "value": {
+              "type": "number",
+              "description": "Cell value"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc assembly constraint --type coincident --obj1 Base --obj2 Pillar --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "assembly_solve",
+        "description": "Solve constraints Returns: solve status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "assembly": {
+              "type": "string",
+              "description": "Assembly name"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc assembly solve --assembly Main --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "assembly_explode",
+        "description": "Exploded view Returns: exploded info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "factor": {
+              "type": "number",
+              "description": "Scale factor"
+            },
+            "direction": {
+              "type": "string",
+              "enum": [
+                "X",
+                "Y",
+                "Z"
+              ],
+              "description": "Direction vector (x,y,z)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc assembly explode --factor 10 --direction z --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "assembly_animate",
+        "description": "Animation Returns: animation info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "start": {
+              "type": "number",
+              "description": "Start value"
+            },
+            "end": {
+              "type": "number",
+              "description": "End value"
+            },
+            "steps": {
+              "type": "integer",
+              "description": "Number of steps"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc assembly animate --start 0 --end 100 --steps 50 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "assembly_list",
+        "description": "List parts Returns: part list.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "assembly": {
+              "type": "string",
+              "description": "Assembly name"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc assembly list --assembly Main --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "assembly_ground",
+        "description": "Ground part Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "assembly": {
+              "type": "string",
+              "description": "Assembly name"
+            },
+            "object": {
+              "type": "string",
+              "description": "Object name"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc assembly ground --assembly Main --object Base --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "assembly_show",
+        "description": "Show tree Returns: tree.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "assembly": {
+              "type": "string",
+              "description": "Assembly name"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc assembly show --assembly Main --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "fem_analysis",
+        "description": "Create analysis Returns: name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc fem analysis --name SA --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "fem_mesh",
+        "description": "Create mesh Returns: mesh info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "analysis": {
+              "type": "string",
+              "description": "Analysis name"
+            },
+            "object": {
+              "type": "string",
+              "description": "Object name"
+            },
+            "max_size": {
+              "type": "number",
+              "description": "Maximum mesh element size"
+            },
+            "min_size": {
+              "type": "number",
+              "description": "Minimum mesh element size"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc fem mesh --analysis SA --object Part --max-size 5 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "fem_material",
+        "description": "Assign material Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "analysis": {
+              "type": "string",
+              "description": "Analysis name"
+            },
+            "material": {
+              "type": "string",
+              "description": "Material name"
+            },
+            "object": {
+              "type": "string",
+              "description": "Object name"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc fem material --analysis SA --material Steel --object Part --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "fem_constraint",
+        "description": "Boundary condition Returns: constraint info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "analysis": {
+              "type": "string",
+              "description": "Analysis name"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "FIXED",
+                "FORCE",
+                "PRESSURE",
+                "DISPLACEMENT",
+                "GRAVITY"
+              ],
+              "description": "Primitive type"
+            },
+            "object": {
+              "type": "string",
+              "description": "Object name"
+            },
+            "value": {
+              "type": "number",
+              "description": "Cell value"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc fem constraint --analysis SA --type fixed --object Part --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "fem_force",
+        "description": "Apply force Returns: status.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "analysis": {
+              "type": "string",
+              "description": "Analysis name"
+            },
+            "object": {
+              "type": "string",
+              "description": "Object name"
+            },
+            "force": {
+              "type": "string",
+              "description": "Force (x,y,z)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc fem force --analysis SA --object Part --force 0,0,-1000 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "fem_solve",
+        "description": "Run solver Returns: solve result.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "analysis": {
+              "type": "string",
+              "description": "Analysis name"
+            },
+            "solver": {
+              "type": "string",
+              "enum": [
+                "CALCULIX",
+                "ELMER",
+                "Z88"
+              ],
+              "description": "Solver (CALCULIX|ELMER|Z88)"
+            },
+            "timeout": {
+              "type": "integer",
+              "description": "Timeout in seconds"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc fem solve --analysis SA --solver calculix --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "fem_result",
+        "description": "Show results Returns: result data.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "analysis": {
+              "type": "string",
+              "description": "Analysis name"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "STRESS",
+                "DISPLACEMENT",
+                "STRAIN",
+                "ALL"
+              ],
+              "description": "Primitive type"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc fem result --analysis SA --type stress --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "fem_list",
+        "description": "List objects Returns: FEM objects.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "analysis": {
+              "type": "string",
+              "description": "Analysis name"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc fem list --analysis SA --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "cam_job",
+        "description": "Create job Returns: job name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "model": {
+              "type": "string",
+              "description": "Model (STR)"
+            },
+            "template": {
+              "type": "string",
+              "description": "Template path"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc cam job --name J1 --model Part --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "cam_tool",
+        "description": "Define tool Returns: tool name.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "ENDMILL",
+                "BALLMILL",
+                "DRILL"
+              ],
+              "description": "Primitive type"
+            },
+            "diameter": {
+              "type": "number",
+              "description": "Diameter in mm"
+            },
+            "length": {
+              "type": "number",
+              "description": "Length in mm"
+            },
+            "speed": {
+              "type": "number",
+              "description": "Tool speed"
+            },
+            "feed": {
+              "type": "number",
+              "description": "Feed rate"
+            },
+            "name": {
+              "type": "string",
+              "description": "Unique element name (e.g., Box_001)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc cam tool --type endmill --diameter 6 --length 50 --name EM6 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "cam_toolpath",
+        "description": "Generate toolpath Returns: toolpath info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "job": {
+              "type": "string",
+              "description": "CAM job name"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "PROFILE",
+                "POCKET",
+                "DRILL",
+                "ADAPTIVE"
+              ],
+              "description": "Primitive type"
+            },
+            "depth": {
+              "type": "number",
+              "description": "Depth in mm"
+            },
+            "step_down": {
+              "type": "number",
+              "description": "Step Down (FLOAT)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc cam toolpath --job J1 --type profile --depth 10 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "cam_postprocess",
+        "description": "Export G-code Returns: file path.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "job": {
+              "type": "string",
+              "description": "CAM job name"
+            },
+            "output": {
+              "type": "string",
+              "description": "Output file path"
+            },
+            "post": {
+              "type": "string",
+              "description": "Post-processor name"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc cam postprocess --job J1 --output out.nc --post linuxcnc --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "cam_simulate",
+        "description": "Simulate Returns: simulation info.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "job": {
+              "type": "string",
+              "description": "CAM job name"
+            },
+            "step": {
+              "type": "number",
+              "description": "Step (FLOAT)"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc cam simulate --job J1 --step 0.1 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "cam_list",
+        "description": "List objects Returns: CAM objects.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "job": {
+              "type": "string",
+              "description": "CAM job name"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          }
+        },
+        "example": "fc cam list --job J1 --json"
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "cam_show",
+        "description": "Show job Returns: job details.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "job": {
+              "type": "string",
+              "description": "CAM job name"
+            },
+            "json_output": {
+              "type": "boolean",
+              "description": "Output in JSON format (recommended for agents)",
+              "default": true
+            }
+          },
+          "required": [
+            "job"
+          ]
+        },
+        "example": "fc cam show J1 --json"
+      }
+    }
+  ]
+}

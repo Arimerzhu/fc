@@ -1,0 +1,18 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fc-test"
+version = "0.1.0"
+description = "FreeCAD CLI Integration Tests"
+requires-python = ">=3.12"
+dependencies = [
+    "fc-core",
+    "fc-cli",
+    "pytest>=8.0.0",
+    "pytest-cov>=5.0.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]

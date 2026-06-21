@@ -1,0 +1,2 @@
+- [Circular import fix](circular_import_fix.md) — Fixed fc_core.geometry circular import blocking all core imports on 2026-06-10
+- [Pre-existing test failures](pre_existing_failures.md) — 31 pre-existing failures in test_runtime.py and test_integration_e2e.py (not caused by new tests)

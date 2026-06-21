@@ -1,0 +1,2038 @@
+{
+  "FreeCAD_CLI_Toolkit": {
+    "version": "0.6.0",
+    "generated": "2026-06-11",
+    "description": "Agent Native FreeCAD CLI - Complete machine-readable tool schema for AI agents",
+    "schema_format": "v1.0",
+    "execution_rules": [
+      "All commands must be executed strictly in order, one operation per command",
+      "Use --json flag for all programmatic consumption",
+      "Use --project flag for multi-step workflows to enable session persistence",
+      "All dimensions are in millimeters (mm) unless otherwise specified",
+      "3D positions use comma-separated x,y,z format (e.g., 10,20,30)",
+      "2D positions use comma-separated x,y format (e.g., 10,20)",
+      "Element names must be unique within a document",
+      "Subsequent commands can only reference previously created element names",
+      "Do not merge multiple operations into a single command",
+      "For complex multi-step workflows, use --project for state persistence",
+      "Maximum 10 commands per batch; provide execution results between batches"
+    ],
+    "global_options": [
+      {
+        "name": "--json",
+        "type": "flag",
+        "default": false,
+        "description": "Output in JSON format"
+      },
+      {
+        "name": "--backend",
+        "type": "choice",
+        "choices": [
+          "headless",
+          "rpc"
+        ],
+        "default": "headless",
+        "description": "Backend type"
+      },
+      {
+        "name": "--freecad-path",
+        "type": "path",
+        "default": null,
+        "description": "FreeCAD executable path"
+      },
+      {
+        "name": "--project",
+        "short": "-p",
+        "type": "path",
+        "default": null,
+        "description": "Project file for session persistence"
+      },
+      {
+        "name": "--host",
+        "type": "string",
+        "default": "localhost",
+        "description": "RPC host"
+      },
+      {
+        "name": "--port",
+        "type": "integer",
+        "default": 9875,
+        "description": "RPC port"
+      }
+    ],
+    "response_format": {
+      "success": {
+        "status": "ok",
+        "operation": "<name>",
+        "data": "<data>",
+        "message": "<msg>"
+      },
+      "error": {
+        "status": "error",
+        "operation": "<name>",
+        "error": {
+          "code": "<CODE>",
+          "message": "<msg>",
+          "suggestion": "<hint>"
+        }
+      }
+    },
+    "command_groups": {
+      "document": {
+        "description": "Document lifecycle",
+        "commands": {
+          "new": {
+            "fn": "Create document",
+            "args": [
+              "--name STR",
+              "--output PATH"
+            ],
+            "ret": "name,path",
+            "ex": "fc document new --name MyPart --json"
+          },
+          "open": {
+            "fn": "Open .FCStd file",
+            "args": [
+              "path PATH"
+            ],
+            "ret": "doc info",
+            "ex": "fc document open existing.FCStd --json"
+          },
+          "save": {
+            "fn": "Save document",
+            "args": [
+              "--output PATH"
+            ],
+            "ret": "file path",
+            "ex": "fc document save --output backup.FCStd --json"
+          },
+          "info": {
+            "fn": "Show doc info",
+            "args": [],
+            "ret": "name,label,count,file",
+            "ex": "fc document info --json"
+          },
+          "close": {
+            "fn": "Close document",
+            "args": [],
+            "ret": "status",
+            "ex": "fc document close --json"
+          },
+          "list": {
+            "fn": "List open docs (RPC)",
+            "args": [],
+            "ret": "doc list",
+            "ex": "fc document list --json"
+          }
+        }
+      },
+      "part": {
+        "description": "3D primitives and operations",
+        "commands": {
+          "add": {
+            "fn": "Create primitive",
+            "args": [
+              "type BOX|CYL|SPHERE|CONE|TORUS|WEDGE|HELIX|ELLIPSOID|SPIRAL",
+              "--name STR",
+              "--position x,y,z",
+              "--rotation rx,ry,rz",
+              "--param k=v"
+            ],
+            "ret": "name,type",
+            "ex": "fc part add box --name B --param Length=20 --param Width=15 --param Height=10 --json"
+          },
+          "remove": {
+            "fn": "Remove part",
+            "args": [
+              "name STR"
+            ],
+            "ret": "status",
+            "ex": "fc part remove B --json"
+          },
+          "list": {
+            "fn": "List parts",
+            "args": [],
+            "ret": "objects",
+            "ex": "fc part list --json"
+          },
+          "get": {
+            "fn": "Get part details",
+            "args": [
+              "name STR"
+            ],
+            "ret": "properties",
+            "ex": "fc part get B --json"
+          },
+          "transform": {
+            "fn": "Change position/rotation",
+            "args": [
+              "name STR",
+              "--position x,y,z",
+              "--rotation rx,ry,rz"
+            ],
+            "ret": "status",
+            "ex": "fc part transform B --position 10,20,30 --json"
+          },
+          "boolean": {
+            "fn": "Boolean operation",
+            "args": [
+              "op CUT|FUSE|COMMON",
+              "base STR",
+              "tool STR",
+              "--name STR"
+            ],
+            "ret": "result name",
+            "ex": "fc part boolean cut B C --name BH --json"
+          },
+          "copy": {
+            "fn": "Copy part",
+            "args": [
+              "name STR",
+              "--name COPY"
+            ],
+            "ret": "new name",
+            "ex": "fc part copy B --name BC --json"
+          },
+          "mirror": {
+            "fn": "Mirror part",
+            "args": [
+              "name STR",
+              "--plane XY|XZ|YZ",
+              "--name RESULT"
+            ],
+            "ret": "mirrored name",
+            "ex": "fc part mirror B --plane XY --json"
+          },
+          "scale": {
+            "fn": "Scale part",
+            "args": [
+              "name STR",
+              "factor FLOAT|x,y,z",
+              "--name RESULT"
+            ],
+            "ret": "scaled name",
+            "ex": "fc part scale B 1.5 --json"
+          },
+          "fillet-3d": {
+            "fn": "Fillet edges",
+            "args": [
+              "name STR",
+              "--radius FLOAT",
+              "--edges all|1,2,3",
+              "--name RESULT"
+            ],
+            "ret": "result name",
+            "ex": "fc part fillet-3d B --radius 2 --json"
+          },
+          "chamfer-3d": {
+            "fn": "Chamfer edges",
+            "args": [
+              "name STR",
+              "--size FLOAT",
+              "--edges all|1,2,3",
+              "--name RESULT"
+            ],
+            "ret": "result name",
+            "ex": "fc part chamfer-3d B --size 1.5 --json"
+          },
+          "info": {
+            "fn": "Detailed info",
+            "args": [
+              "name STR"
+            ],
+            "ret": "full properties",
+            "ex": "fc part info B --json"
+          },
+          "bounds": {
+            "fn": "Bounding box",
+            "args": [
+              "name STR"
+            ],
+            "ret": "x_min,x_max,y_min,y_max,z_min,z_max",
+            "ex": "fc part bounds B --json"
+          },
+          "hole": {
+            "fn": "Create hole",
+            "args": [
+              "name STR",
+              "--diameter FLOAT",
+              "--depth FLOAT",
+              "--position x,y,z",
+              "--direction x,y,z",
+              "--name RESULT"
+            ],
+            "ret": "result name",
+            "ex": "fc part hole B --diameter 8 --depth 10 --position 5,5,0 --json"
+          }
+        }
+      },
+      "sketch": {
+        "description": "2D sketching",
+        "commands": {
+          "new": {
+            "fn": "Create sketch",
+            "args": [
+              "--name STR",
+              "--plane XY|XZ|YZ",
+              "--offset FLOAT"
+            ],
+            "ret": "sketch name",
+            "ex": "fc sketch new --name S --plane XY --json"
+          },
+          "add-line": {
+            "fn": "Add line",
+            "args": [
+              "sketch STR",
+              "--start x,y",
+              "--end x,y"
+            ],
+            "ret": "geo index",
+            "ex": "fc sketch add-line S --start 0,0 --end 10,0 --json"
+          },
+          "add-circle": {
+            "fn": "Add circle",
+            "args": [
+              "sketch STR",
+              "--center x,y",
+              "--radius FLOAT"
+            ],
+            "ret": "geo index",
+            "ex": "fc sketch add-circle S --center 0,0 --radius 10 --json"
+          },
+          "add-rect": {
+            "fn": "Add rectangle",
+            "args": [
+              "sketch STR",
+              "--corner x,y",
+              "--width FLOAT",
+              "--height FLOAT"
+            ],
+            "ret": "geo indices",
+            "ex": "fc sketch add-rect S --corner 0,0 --width 20 --height 10 --json"
+          },
+          "add-arc": {
+            "fn": "Add arc",
+            "args": [
+              "sketch STR",
+              "--center x,y",
+              "--radius FLOAT",
+              "--start-angle FLOAT",
+              "--end-angle FLOAT"
+            ],
+            "ret": "geo index",
+            "ex": "fc sketch add-arc S --center 0,0 --radius 10 --start-angle 0 --end-angle 180 --json"
+          },
+          "add-ellipse": {
+            "fn": "Add ellipse",
+            "args": [
+              "sketch STR",
+              "--center x,y",
+              "--major-radius FLOAT",
+              "--minor-radius FLOAT",
+              "--major-angle FLOAT"
+            ],
+            "ret": "geo index",
+            "ex": "fc sketch add-ellipse S --center 0,0 --major-radius 10 --minor-radius 5 --json"
+          },
+          "add-polygon": {
+            "fn": "Add polygon",
+            "args": [
+              "sketch STR",
+              "--center x,y",
+              "--radius FLOAT",
+              "--sides INT"
+            ],
+            "ret": "geo indices",
+            "ex": "fc sketch add-polygon S --center 0,0 --radius 10 --sides 6 --json"
+          },
+          "add-bspline": {
+            "fn": "Add B-spline",
+            "args": [
+              "sketch STR",
+              "--points x,y;x,y;...",
+              "--closed"
+            ],
+            "ret": "geo index",
+            "ex": "fc sketch add-bspline S --points 0,0;10,5;20,0 --json"
+          },
+          "add-slot": {
+            "fn": "Add slot",
+            "args": [
+              "sketch STR",
+              "--center x,y",
+              "--length FLOAT",
+              "--width FLOAT",
+              "--angle FLOAT"
+            ],
+            "ret": "geo index",
+            "ex": "fc sketch add-slot S --center 0,0 --length 20 --width 5 --json"
+          },
+          "add-point": {
+            "fn": "Add point",
+            "args": [
+              "sketch STR",
+              "--position x,y"
+            ],
+            "ret": "geo index",
+            "ex": "fc sketch add-point S --position 5,5 --json"
+          },
+          "constrain": {
+            "fn": "Add constraint",
+            "args": [
+              "sketch STR",
+              "type CONSTRAINT_TYPE",
+              "--elements INT,INT",
+              "--value FLOAT"
+            ],
+            "ret": "constraint info",
+            "ex": "fc sketch constrain S horizontal --elements 0 --json"
+          },
+          "close": {
+            "fn": "Close sketch",
+            "args": [
+              "sketch STR"
+            ],
+            "ret": "status",
+            "ex": "fc sketch close S --json"
+          },
+          "list": {
+            "fn": "List sketches",
+            "args": [],
+            "ret": "sketch list",
+            "ex": "fc sketch list --json"
+          },
+          "get": {
+            "fn": "Get sketch details",
+            "args": [
+              "name STR"
+            ],
+            "ret": "geo count,constraints",
+            "ex": "fc sketch get S --json"
+          },
+          "validate": {
+            "fn": "Validate sketch",
+            "args": [
+              "name STR"
+            ],
+            "ret": "valid,issues",
+            "ex": "fc sketch validate S --json"
+          },
+          "solve-status": {
+            "fn": "Solve status",
+            "args": [
+              "name STR"
+            ],
+            "ret": "solver_status,DOF",
+            "ex": "fc sketch solve-status S --json"
+          },
+          "delete-geom": {
+            "fn": "Delete geometry",
+            "args": [
+              "sketch STR",
+              "indices INT,INT,..."
+            ],
+            "ret": "deleted count",
+            "ex": "fc sketch delete-geom S 0,2,4 --json"
+          },
+          "trim": {
+            "fn": "Trim geometry",
+            "args": [
+              "sketch STR",
+              "geom_index INT",
+              "--point x,y"
+            ],
+            "ret": "status",
+            "ex": "fc sketch trim S 0 --point 5,0 --json"
+          },
+          "mirror": {
+            "fn": "Mirror geometry",
+            "args": [
+              "sketch STR",
+              "--elements INT,INT",
+              "--axis x|y"
+            ],
+            "ret": "mirrored count",
+            "ex": "fc sketch mirror S --elements 0,1,2 --axis x --json"
+          },
+          "clone": {
+            "fn": "Clone geometry",
+            "args": [
+              "sketch STR",
+              "--elements INT,INT",
+              "--offset dx,dy"
+            ],
+            "ret": "cloned count",
+            "ex": "fc sketch clone S --elements 0,1 --offset 20,0 --json"
+          },
+          "export": {
+            "fn": "Export to DXF",
+            "args": [
+              "sketch STR",
+              "--output PATH",
+              "--overwrite"
+            ],
+            "ret": "file path",
+            "ex": "fc sketch export S --output sketch.dxf --overwrite --json"
+          }
+        }
+      },
+      "body": {
+        "description": "PartDesign features",
+        "commands": {
+          "new": {
+            "fn": "Create body",
+            "args": [
+              "--name STR"
+            ],
+            "ret": "body name",
+            "ex": "fc body new --name Body --json"
+          },
+          "pad": {
+            "fn": "Extrude sketch",
+            "args": [
+              "body STR",
+              "sketch STR",
+              "--length FLOAT",
+              "--symmetric",
+              "--reversed"
+            ],
+            "ret": "feature name",
+            "ex": "fc body pad Body Sketch --length 20 --json"
+          },
+          "pocket": {
+            "fn": "Cut extrusion",
+            "args": [
+              "body STR",
+              "sketch STR",
+              "--length FLOAT",
+              "--symmetric",
+              "--reversed"
+            ],
+            "ret": "feature name",
+            "ex": "fc body pocket Body Sketch --length 5 --json"
+          },
+          "fillet": {
+            "fn": "Fillet feature",
+            "args": [
+              "body STR",
+              "--radius FLOAT",
+              "--edges all|INT,INT"
+            ],
+            "ret": "feature name",
+            "ex": "fc body fillet Body --radius 2 --json"
+          },
+          "chamfer": {
+            "fn": "Chamfer feature",
+            "args": [
+              "body STR",
+              "--size FLOAT",
+              "--edges all|INT,INT"
+            ],
+            "ret": "feature name",
+            "ex": "fc body chamfer Body --size 1.5 --json"
+          },
+          "revolution": {
+            "fn": "Revolve sketch",
+            "args": [
+              "body STR",
+              "sketch STR",
+              "--angle FLOAT",
+              "--axis X|Y|Z",
+              "--reversed"
+            ],
+            "ret": "feature name",
+            "ex": "fc body revolution Body Sketch --angle 360 --axis Z --json"
+          },
+          "groove": {
+            "fn": "Groove",
+            "args": [
+              "body STR",
+              "sketch STR",
+              "--angle FLOAT",
+              "--axis X|Y|Z",
+              "--reversed"
+            ],
+            "ret": "feature name",
+            "ex": "fc body groove Body Sketch --angle 360 --json"
+          },
+          "hole": {
+            "fn": "Hole feature",
+            "args": [
+              "body STR",
+              "sketch STR",
+              "--type SIMPLE|COUNTERBORE|COUNTERSINK|THREADED",
+              "--diameter FLOAT",
+              "--depth FLOAT",
+              "--name STR"
+            ],
+            "ret": "feature name",
+            "ex": "fc body hole Body HS --diameter 8 --depth 10 --json"
+          },
+          "pattern-linear": {
+            "fn": "Linear pattern",
+            "args": [
+              "body STR",
+              "feature STR",
+              "--direction X|Y|Z",
+              "--count INT",
+              "--spacing FLOAT",
+              "--name STR"
+            ],
+            "ret": "pattern name",
+            "ex": "fc body pattern-linear Body Hole --direction X --count 3 --spacing 10 --json"
+          },
+          "pattern-polar": {
+            "fn": "Polar pattern",
+            "args": [
+              "body STR",
+              "feature STR",
+              "--axis X|Y|Z",
+              "--count INT",
+              "--angle FLOAT",
+              "--name STR"
+            ],
+            "ret": "pattern name",
+            "ex": "fc body pattern-polar Body Hole --axis Z --count 6 --angle 360 --json"
+          },
+          "pattern-mirror": {
+            "fn": "Mirror pattern",
+            "args": [
+              "body STR",
+              "feature STR",
+              "--plane XY|XZ|YZ",
+              "--name STR"
+            ],
+            "ret": "pattern name",
+            "ex": "fc body pattern-mirror Body Hole --plane XY --json"
+          },
+          "shell": {
+            "fn": "Shell solid",
+            "args": [
+              "body STR",
+              "--thickness FLOAT",
+              "--faces INT,INT",
+              "--name STR"
+            ],
+            "ret": "feature name",
+            "ex": "fc body shell Body --thickness 2 --json"
+          },
+          "draft": {
+            "fn": "Draft angle",
+            "args": [
+              "body STR",
+              "--angle FLOAT",
+              "--faces INT,INT",
+              "--plane XY|XZ|YZ",
+              "--name STR"
+            ],
+            "ret": "feature name",
+            "ex": "fc body draft Body --angle 5 --faces 0,1 --json"
+          },
+          "datum-plane": {
+            "fn": "Reference plane",
+            "args": [
+              "body STR",
+              "--name STR",
+              "--plane XY|XZ|YZ",
+              "--offset FLOAT",
+              "--rotation rx,ry,rz"
+            ],
+            "ret": "datum name",
+            "ex": "fc body datum-plane Body --name DP --plane XY --offset 10 --json"
+          },
+          "datum-point": {
+            "fn": "Reference point",
+            "args": [
+              "body STR",
+              "--name STR",
+              "--position x,y,z"
+            ],
+            "ret": "datum name",
+            "ex": "fc body datum-point Body --name DPT --position 0,0,0 --json"
+          },
+          "datum-line": {
+            "fn": "Reference line",
+            "args": [
+              "body STR",
+              "--name STR",
+              "--direction X|Y|Z",
+              "--position x,y,z"
+            ],
+            "ret": "datum name",
+            "ex": "fc body datum-line Body --name DL --direction Z --json"
+          },
+          "set-tip": {
+            "fn": "Set tip",
+            "args": [
+              "body STR",
+              "--feature STR"
+            ],
+            "ret": "status",
+            "ex": "fc body set-tip Body --feature Pad --json"
+          },
+          "remove-feature": {
+            "fn": "Remove feature",
+            "args": [
+              "body STR",
+              "feature STR"
+            ],
+            "ret": "status",
+            "ex": "fc body remove-feature Body Fillet --json"
+          },
+          "list": {
+            "fn": "List bodies",
+            "args": [],
+            "ret": "body list",
+            "ex": "fc body list --json"
+          },
+          "get": {
+            "fn": "Get body details",
+            "args": [
+              "name STR"
+            ],
+            "ret": "features list",
+            "ex": "fc body get Body --json"
+          }
+        }
+      },
+      "export": {
+        "description": "Export to file formats",
+        "commands": {
+          "step": {
+            "fn": "Export STEP",
+            "args": [
+              "output PATH",
+              "--overwrite"
+            ],
+            "ret": "file,size",
+            "ex": "fc export step model.step --overwrite --json"
+          },
+          "stl": {
+            "fn": "Export STL",
+            "args": [
+              "output PATH",
+              "--overwrite",
+              "--tolerance FLOAT"
+            ],
+            "ret": "file,size",
+            "ex": "fc export stl model.stl --tolerance 0.05 --overwrite --json"
+          },
+          "obj": {
+            "fn": "Export OBJ",
+            "args": [
+              "output PATH",
+              "--overwrite"
+            ],
+            "ret": "file",
+            "ex": "fc export obj model.obj --overwrite --json"
+          },
+          "brep": {
+            "fn": "Export BREP",
+            "args": [
+              "output PATH",
+              "--overwrite"
+            ],
+            "ret": "file",
+            "ex": "fc export brep model.brep --overwrite --json"
+          },
+          "dxf": {
+            "fn": "Export DXF",
+            "args": [
+              "output PATH",
+              "--overwrite"
+            ],
+            "ret": "file",
+            "ex": "fc export dxf model.dxf --overwrite --json"
+          },
+          "svg": {
+            "fn": "Export SVG",
+            "args": [
+              "output PATH",
+              "--overwrite"
+            ],
+            "ret": "file",
+            "ex": "fc export svg model.svg --overwrite --json"
+          },
+          "pdf": {
+            "fn": "Export PDF",
+            "args": [
+              "output PATH",
+              "--overwrite"
+            ],
+            "ret": "file",
+            "ex": "fc export pdf drawing.pdf --overwrite --json"
+          },
+          "gltf": {
+            "fn": "Export glTF",
+            "args": [
+              "output PATH",
+              "--overwrite"
+            ],
+            "ret": "file",
+            "ex": "fc export gltf model.gltf --overwrite --json"
+          },
+          "3mf": {
+            "fn": "Export 3MF",
+            "args": [
+              "output PATH",
+              "--overwrite"
+            ],
+            "ret": "file",
+            "ex": "fc export 3mf model.3mf --overwrite --json"
+          },
+          "fcstd": {
+            "fn": "Save .FCStd",
+            "args": [
+              "output PATH",
+              "--overwrite"
+            ],
+            "ret": "file",
+            "ex": "fc export fcstd model.FCStd --overwrite --json"
+          },
+          "iges": {
+            "fn": "Export IGES",
+            "args": [
+              "output PATH",
+              "--objects STR,STR"
+            ],
+            "ret": "file,size",
+            "ex": "fc export iges model.iges --json"
+          },
+          "off": {
+            "fn": "Export OFF",
+            "args": [
+              "output PATH"
+            ],
+            "ret": "file",
+            "ex": "fc export off model.off --json"
+          },
+          "ply": {
+            "fn": "Export PLY",
+            "args": [
+              "output PATH"
+            ],
+            "ret": "file",
+            "ex": "fc export ply model.ply --json"
+          },
+          "presets": {
+            "fn": "List presets",
+            "args": [],
+            "ret": "presets dict",
+            "ex": "fc export presets --json"
+          }
+        }
+      },
+      "import": {
+        "description": "Import CAD/mesh files",
+        "commands": {
+          "auto": {
+            "fn": "Auto-detect import",
+            "args": [
+              "path PATH"
+            ],
+            "ret": "import info",
+            "ex": "fc import auto model.step --json"
+          },
+          "step": {
+            "fn": "Import STEP",
+            "args": [
+              "path PATH"
+            ],
+            "ret": "import info",
+            "ex": "fc import step model.step --json"
+          },
+          "stl": {
+            "fn": "Import STL",
+            "args": [
+              "path PATH"
+            ],
+            "ret": "mesh info",
+            "ex": "fc import stl mesh.stl --json"
+          },
+          "obj": {
+            "fn": "Import OBJ",
+            "args": [
+              "path PATH"
+            ],
+            "ret": "mesh info",
+            "ex": "fc import obj mesh.obj --json"
+          },
+          "dxf": {
+            "fn": "Import DXF",
+            "args": [
+              "path PATH"
+            ],
+            "ret": "import info",
+            "ex": "fc import dxf drawing.dxf --json"
+          },
+          "brep": {
+            "fn": "Import BREP",
+            "args": [
+              "path PATH"
+            ],
+            "ret": "import info",
+            "ex": "fc import brep shape.brep --json"
+          },
+          "iges": {
+            "fn": "Import IGES",
+            "args": [
+              "path PATH"
+            ],
+            "ret": "import info",
+            "ex": "fc import iges model.iges --json"
+          },
+          "svg": {
+            "fn": "Import SVG",
+            "args": [
+              "path PATH"
+            ],
+            "ret": "import info",
+            "ex": "fc import svg drawing.svg --json"
+          },
+          "3mf": {
+            "fn": "Import 3MF",
+            "args": [
+              "path PATH"
+            ],
+            "ret": "mesh info",
+            "ex": "fc import 3mf model.3mf --json"
+          },
+          "ply": {
+            "fn": "Import PLY",
+            "args": [
+              "path PATH"
+            ],
+            "ret": "mesh info",
+            "ex": "fc import ply mesh.ply --json"
+          },
+          "info": {
+            "fn": "File info",
+            "args": [
+              "path PATH"
+            ],
+            "ret": "format,size,mesh",
+            "ex": "fc import info model.stl --json"
+          }
+        }
+      },
+      "session": {
+        "description": "Session management",
+        "commands": {
+          "undo": {
+            "fn": "Undo",
+            "args": [
+              "--steps INT"
+            ],
+            "ret": "undo count",
+            "ex": "fc session undo --steps 1 --json"
+          },
+          "redo": {
+            "fn": "Redo",
+            "args": [
+              "--steps INT"
+            ],
+            "ret": "redo count",
+            "ex": "fc session redo --steps 1 --json"
+          },
+          "status": {
+            "fn": "Session status",
+            "args": [],
+            "ret": "backend,project,doc",
+            "ex": "fc session status --json"
+          },
+          "history": {
+            "fn": "Operation history",
+            "args": [
+              "--limit INT"
+            ],
+            "ret": "operations",
+            "ex": "fc session history --limit 20 --json"
+          },
+          "snapshot": {
+            "fn": "Create snapshot",
+            "args": [
+              "name STR",
+              "--description STR"
+            ],
+            "ret": "metadata",
+            "ex": "fc session snapshot v1.0 --description Initial --json"
+          },
+          "restore": {
+            "fn": "Restore snapshot",
+            "args": [
+              "name STR"
+            ],
+            "ret": "metadata",
+            "ex": "fc session restore v1.0 --json"
+          }
+        }
+      },
+      "execute": {
+        "description": "Execute Python in FreeCAD",
+        "commands": {
+          "code": {
+            "fn": "Execute code",
+            "args": [
+              "code STR",
+              "--timeout INT"
+            ],
+            "ret": "result",
+            "ex": "fc execute code print(1) --json"
+          },
+          "file": {
+            "fn": "Execute file",
+            "args": [
+              "path PATH",
+              "--timeout INT"
+            ],
+            "ret": "result",
+            "ex": "fc execute file macro.py --json"
+          }
+        }
+      },
+      "mesh": {
+        "description": "Mesh operations",
+        "commands": {
+          "import": {
+            "fn": "Import mesh",
+            "args": [
+              "path PATH",
+              "--name STR"
+            ],
+            "ret": "mesh info",
+            "ex": "fc mesh import model.stl --name M --json"
+          },
+          "export": {
+            "fn": "Export mesh",
+            "args": [
+              "output PATH",
+              "--format STL|OBJ|PLY|OFF",
+              "--tolerance FLOAT",
+              "--overwrite"
+            ],
+            "ret": "export info",
+            "ex": "fc mesh export out.stl --format stl --overwrite --json"
+          },
+          "analyze": {
+            "fn": "Analyze quality",
+            "args": [
+              "--name STR"
+            ],
+            "ret": "quality metrics",
+            "ex": "fc mesh analyze --name M --json"
+          },
+          "repair": {
+            "fn": "Repair defects",
+            "args": [
+              "--name STR",
+              "--fix-degenerates",
+              "--fix-duplicates",
+              "--fix-normals"
+            ],
+            "ret": "repair results",
+            "ex": "fc mesh repair --name M --fix-degenerates --fix-duplicates --json"
+          },
+          "refine": {
+            "fn": "Subdivide mesh",
+            "args": [
+              "--name STR",
+              "--iterations INT"
+            ],
+            "ret": "facet counts",
+            "ex": "fc mesh refine --name M --iterations 2 --json"
+          },
+          "decimate": {
+            "fn": "Reduce polygons",
+            "args": [
+              "--name STR",
+              "--reduction FLOAT"
+            ],
+            "ret": "reduction ratio",
+            "ex": "fc mesh decimate --name M --reduction 0.5 --json"
+          },
+          "boolean": {
+            "fn": "Mesh boolean",
+            "args": [
+              "op CUT|FUSE|COMMON",
+              "base STR",
+              "tool STR",
+              "--name STR"
+            ],
+            "ret": "result info",
+            "ex": "fc mesh boolean fuse M1 M2 --name F --json"
+          },
+          "section": {
+            "fn": "Cross-section",
+            "args": [
+              "--name STR",
+              "--plane XY|XZ|YZ",
+              "--offset FLOAT"
+            ],
+            "ret": "section data",
+            "ex": "fc mesh section --name M --plane XY --offset 5 --json"
+          },
+          "list": {
+            "fn": "List meshes",
+            "args": [],
+            "ret": "mesh list",
+            "ex": "fc mesh list --json"
+          },
+          "info": {
+            "fn": "Mesh info",
+            "args": [
+              "name STR"
+            ],
+            "ret": "detailed info",
+            "ex": "fc mesh info M --json"
+          },
+          "create": {
+            "fn": "Create primitive",
+            "args": [
+              "type CUBE|SPHERE|CYLINDER",
+              "--name STR",
+              "--size FLOAT"
+            ],
+            "ret": "mesh info",
+            "ex": "fc mesh create cube --name MC --size 10 --json"
+          },
+          "evaluate": {
+            "fn": "Evaluate quality",
+            "args": [
+              "name STR"
+            ],
+            "ret": "quality",
+            "ex": "fc mesh evaluate M --json"
+          },
+          "flip-normals": {
+            "fn": "Flip normals",
+            "args": [
+              "name STR"
+            ],
+            "ret": "status",
+            "ex": "fc mesh flip-normals M --json"
+          },
+          "smooth": {
+            "fn": "Smooth mesh",
+            "args": [
+              "name STR",
+              "--iterations INT",
+              "--factor FLOAT"
+            ],
+            "ret": "status",
+            "ex": "fc mesh smooth M --iterations 3 --factor 0.5 --json"
+          }
+        }
+      },
+      "draft": {
+        "description": "2D drafting",
+        "commands": {
+          "line": {
+            "fn": "Create line",
+            "args": [
+              "--start x,y,z",
+              "--end x,y,z",
+              "--name STR"
+            ],
+            "ret": "name",
+            "ex": "fc draft line --start 0,0,0 --end 10,0,0 --name L --json"
+          },
+          "wire": {
+            "fn": "Create wire",
+            "args": [
+              "--points x,y,z;x,y,z;...",
+              "--closed",
+              "--name STR"
+            ],
+            "ret": "name",
+            "ex": "fc draft wire --points 0,0,0;10,0,0;10,10,0 --closed --name W --json"
+          },
+          "circle": {
+            "fn": "Create circle",
+            "args": [
+              "--center x,y,z",
+              "--radius FLOAT",
+              "--name STR"
+            ],
+            "ret": "name",
+            "ex": "fc draft circle --center 0,0,0 --radius 5 --name C --json"
+          },
+          "arc": {
+            "fn": "Create arc",
+            "args": [
+              "--center x,y,z",
+              "--radius FLOAT",
+              "--start-angle FLOAT",
+              "--end-angle FLOAT",
+              "--name STR"
+            ],
+            "ret": "name",
+            "ex": "fc draft arc --center 0,0,0 --radius 10 --start-angle 0 --end-angle 180 --json"
+          },
+          "rect": {
+            "fn": "Create rectangle",
+            "args": [
+              "--corner x,y,z",
+              "--width FLOAT",
+              "--height FLOAT",
+              "--name STR"
+            ],
+            "ret": "name",
+            "ex": "fc draft rect --corner 0,0,0 --width 20 --height 10 --json"
+          },
+          "polygon": {
+            "fn": "Create polygon",
+            "args": [
+              "--center x,y,z",
+              "--radius FLOAT",
+              "--sides INT",
+              "--name STR"
+            ],
+            "ret": "name",
+            "ex": "fc draft polygon --center 0,0,0 --radius 10 --sides 6 --json"
+          },
+          "text": {
+            "fn": "Create text",
+            "args": [
+              "text STR",
+              "--position x,y,z",
+              "--size FLOAT",
+              "--name STR"
+            ],
+            "ret": "name",
+            "ex": "fc draft text Hello --position 0,0,0 --size 5 --json"
+          },
+          "dimension": {
+            "fn": "Create dimension",
+            "args": [
+              "--start x,y,z",
+              "--end x,y,z",
+              "--offset x,y,z",
+              "--name STR"
+            ],
+            "ret": "name",
+            "ex": "fc draft dimension --start 0,0,0 --end 10,0,0 --offset 0,5,0 --json"
+          },
+          "array": {
+            "fn": "Create array",
+            "args": [
+              "name STR",
+              "--type POLAR|RECTANGULAR",
+              "--count INT",
+              "--rows INT",
+              "--cols INT"
+            ],
+            "ret": "array name",
+            "ex": "fc draft array C --type polar --count 6 --json"
+          },
+          "offset": {
+            "fn": "Create offset",
+            "args": [
+              "name STR",
+              "--distance FLOAT"
+            ],
+            "ret": "offset name",
+            "ex": "fc draft offset C --distance 2 --json"
+          },
+          "move": {
+            "fn": "Move object",
+            "args": [
+              "name STR",
+              "--vector x,y,z"
+            ],
+            "ret": "status",
+            "ex": "fc draft move L --vector 10,0,0 --json"
+          },
+          "rotate": {
+            "fn": "Rotate object",
+            "args": [
+              "name STR",
+              "--angle FLOAT",
+              "--center x,y,z"
+            ],
+            "ret": "status",
+            "ex": "fc draft rotate L --angle 45 --center 0,0,0 --json"
+          },
+          "scale": {
+            "fn": "Scale object",
+            "args": [
+              "name STR",
+              "--factor FLOAT",
+              "--center x,y,z"
+            ],
+            "ret": "status",
+            "ex": "fc draft scale C --factor 1.5 --json"
+          },
+          "trim": {
+            "fn": "Trim geometry",
+            "args": [
+              "name STR",
+              "--edge INT",
+              "--point x,y,z"
+            ],
+            "ret": "status",
+            "ex": "fc draft trim L --edge 0 --point 5,0 --json"
+          },
+          "list": {
+            "fn": "List objects",
+            "args": [],
+            "ret": "object list",
+            "ex": "fc draft list --json"
+          }
+        }
+      },
+      "surface": {
+        "description": "Surface operations",
+        "commands": {
+          "loft": {
+            "fn": "Loft profiles",
+            "args": [
+              "--profiles STR;STR",
+              "--solid",
+              "--ruled",
+              "--name STR"
+            ],
+            "ret": "loft name",
+            "ex": "fc surface loft --profiles S1;S2 --solid --name L --json"
+          },
+          "sweep": {
+            "fn": "Sweep along path",
+            "args": [
+              "--profile STR",
+              "--path STR",
+              "--solid",
+              "--name STR"
+            ],
+            "ret": "sweep name",
+            "ex": "fc surface sweep --profile S --path P --name SW --json"
+          },
+          "fill": {
+            "fn": "Fill boundary",
+            "args": [
+              "--edges STR.Edge1;STR.Edge2",
+              "--degree INT",
+              "--name STR"
+            ],
+            "ret": "fill name",
+            "ex": "fc surface fill --edges B.Edge1;B.Edge2 --name F --json"
+          },
+          "pipe": {
+            "fn": "Pipe surface",
+            "args": [
+              "--path STR",
+              "--radius FLOAT",
+              "--name STR"
+            ],
+            "ret": "pipe name",
+            "ex": "fc surface pipe --path P --radius 2 --name PI --json"
+          },
+          "offset": {
+            "fn": "Offset surface",
+            "args": [
+              "name STR",
+              "--distance FLOAT",
+              "--name RESULT"
+            ],
+            "ret": "offset name",
+            "ex": "fc surface offset S --distance 2 --json"
+          },
+          "thicken": {
+            "fn": "Thicken to solid",
+            "args": [
+              "name STR",
+              "--thickness FLOAT",
+              "--direction BOTH|SINGLE",
+              "--name RESULT"
+            ],
+            "ret": "solid name",
+            "ex": "fc surface thicken S --thickness 2 --name T --json"
+          },
+          "flatten": {
+            "fn": "Flatten surface",
+            "args": [
+              "name STR",
+              "--tolerance FLOAT",
+              "--name RESULT"
+            ],
+            "ret": "flattened name",
+            "ex": "fc surface flatten S --json"
+          },
+          "sew": {
+            "fn": "Sew surfaces",
+            "args": [
+              "--objects STR;STR",
+              "--tolerance FLOAT",
+              "--name RESULT"
+            ],
+            "ret": "sewn name",
+            "ex": "fc surface sew --objects S1;S2 --json"
+          },
+          "list": {
+            "fn": "List surfaces",
+            "args": [],
+            "ret": "surface list",
+            "ex": "fc surface list --json"
+          }
+        }
+      },
+      "techdraw": {
+        "description": "Technical drawings",
+        "commands": {
+          "page": {
+            "fn": "Create page",
+            "args": [
+              "--name STR",
+              "--template PATH",
+              "--format A4|A3|A2|A1|A0"
+            ],
+            "ret": "page name",
+            "ex": "fc techdraw page --name P1 --format A3 --json"
+          },
+          "view": {
+            "fn": "Add view",
+            "args": [
+              "--page STR",
+              "--source STR",
+              "--direction x,y,z",
+              "--scale FLOAT"
+            ],
+            "ret": "view name",
+            "ex": "fc techdraw view --page P1 --source B --direction 0,0,1 --scale 1.0 --json"
+          },
+          "dimension": {
+            "fn": "Add dimension",
+            "args": [
+              "--view STR",
+              "--type DISTANCE|RADIUS|DIAMETER|ANGLE",
+              "--elements INT,INT"
+            ],
+            "ret": "dimension name",
+            "ex": "fc techdraw dimension --view V --type distance --elements 0,1 --json"
+          },
+          "annotation": {
+            "fn": "Add annotation",
+            "args": [
+              "--page STR",
+              "--text STR",
+              "--position x,y"
+            ],
+            "ret": "annotation name",
+            "ex": "fc techdraw annotation --page P1 --text Title --position 10,10 --json"
+          },
+          "symbol": {
+            "fn": "Add symbol",
+            "args": [
+              "--page STR",
+              "--symbol PATH",
+              "--position x,y"
+            ],
+            "ret": "symbol name",
+            "ex": "fc techdraw symbol --page P1 --symbol sym.svg --position 50,50 --json"
+          },
+          "export": {
+            "fn": "Export page",
+            "args": [
+              "page STR",
+              "--output PATH",
+              "--format SVG|PDF"
+            ],
+            "ret": "file path",
+            "ex": "fc techdraw export P1 --output drawing.pdf --format pdf --json"
+          },
+          "list": {
+            "fn": "List pages",
+            "args": [],
+            "ret": "page list",
+            "ex": "fc techdraw list --json"
+          },
+          "get": {
+            "fn": "Get page details",
+            "args": [
+              "name STR"
+            ],
+            "ret": "page info",
+            "ex": "fc techdraw get P1 --json"
+          }
+        }
+      },
+      "spreadsheet": {
+        "description": "Spreadsheet-driven design",
+        "commands": {
+          "create": {
+            "fn": "Create spreadsheet",
+            "args": [
+              "--name STR"
+            ],
+            "ret": "name",
+            "ex": "fc spreadsheet create --name Params --json"
+          },
+          "set": {
+            "fn": "Set cell value",
+            "args": [
+              "--sheet STR",
+              "--cell STR",
+              "--value STR"
+            ],
+            "ret": "status",
+            "ex": "fc spreadsheet set --sheet Params --cell A1 --value 100 --json"
+          },
+          "get": {
+            "fn": "Get cell value",
+            "args": [
+              "--sheet STR",
+              "--cell STR"
+            ],
+            "ret": "value",
+            "ex": "fc spreadsheet get --sheet Params --cell A1 --json"
+          },
+          "formula": {
+            "fn": "Set formula",
+            "args": [
+              "--sheet STR",
+              "--cell STR",
+              "--formula STR"
+            ],
+            "ret": "status",
+            "ex": "fc spreadsheet formula --sheet Params --cell B1 --formula =A1*2 --json"
+          },
+          "alias": {
+            "fn": "Set alias",
+            "args": [
+              "--sheet STR",
+              "--cell STR",
+              "--alias STR"
+            ],
+            "ret": "status",
+            "ex": "fc spreadsheet alias --sheet Params --cell A1 --alias Length --json"
+          },
+          "link": {
+            "fn": "Link to property",
+            "args": [
+              "--sheet STR",
+              "--cell STR",
+              "--object STR",
+              "--property STR"
+            ],
+            "ret": "status",
+            "ex": "fc spreadsheet link --sheet Params --cell A1 --object Box --property Length --json"
+          },
+          "show": {
+            "fn": "Show contents",
+            "args": [
+              "--sheet STR",
+              "--range STR"
+            ],
+            "ret": "cell values",
+            "ex": "fc spreadsheet show --sheet Params --range A1:C10 --json"
+          },
+          "list": {
+            "fn": "List sheets",
+            "args": [],
+            "ret": "sheet list",
+            "ex": "fc spreadsheet list --json"
+          },
+          "clear": {
+            "fn": "Clear cells",
+            "args": [
+              "--sheet STR",
+              "--cell STR",
+              "--range STR"
+            ],
+            "ret": "status",
+            "ex": "fc spreadsheet clear --sheet Params --cell A1 --json"
+          },
+          "export": {
+            "fn": "Export CSV",
+            "args": [
+              "--sheet STR",
+              "--output PATH"
+            ],
+            "ret": "file path",
+            "ex": "fc spreadsheet export --sheet Params --output params.csv --json"
+          },
+          "import": {
+            "fn": "Import CSV",
+            "args": [
+              "--sheet STR",
+              "--input PATH"
+            ],
+            "ret": "status",
+            "ex": "fc spreadsheet import --sheet Params --input params.csv --json"
+          }
+        }
+      },
+      "material": {
+        "description": "Material management",
+        "commands": {
+          "list": {
+            "fn": "List materials",
+            "args": [
+              "--library STR"
+            ],
+            "ret": "material list",
+            "ex": "fc material list --json"
+          },
+          "show": {
+            "fn": "Show properties",
+            "args": [
+              "name STR"
+            ],
+            "ret": "properties",
+            "ex": "fc material show Steel --json"
+          },
+          "assign": {
+            "fn": "Assign material",
+            "args": [
+              "--object STR",
+              "--material STR"
+            ],
+            "ret": "status",
+            "ex": "fc material assign --object Box --material Steel --json"
+          },
+          "create": {
+            "fn": "Create material",
+            "args": [
+              "--name STR",
+              "--density FLOAT",
+              "--youngs-modulus FLOAT",
+              "--poisson-ratio FLOAT",
+              "--color R,G,B"
+            ],
+            "ret": "name",
+            "ex": "fc material create --name MS --density 7850 --json"
+          },
+          "edit": {
+            "fn": "Edit material",
+            "args": [
+              "name STR",
+              "--property KEY=VALUE"
+            ],
+            "ret": "status",
+            "ex": "fc material edit MS --property Density=7900 --json"
+          },
+          "remove": {
+            "fn": "Remove material",
+            "args": [
+              "name STR"
+            ],
+            "ret": "status",
+            "ex": "fc material remove MS --json"
+          },
+          "library": {
+            "fn": "List libraries",
+            "args": [],
+            "ret": "libraries",
+            "ex": "fc material library --json"
+          },
+          "export": {
+            "fn": "Export card",
+            "args": [
+              "name STR",
+              "--output PATH"
+            ],
+            "ret": "file path",
+            "ex": "fc material export Steel --output steel.json --json"
+          },
+          "import": {
+            "fn": "Import card",
+            "args": [
+              "path PATH",
+              "--name STR"
+            ],
+            "ret": "name",
+            "ex": "fc material import steel.json --name Steel --json"
+          }
+        }
+      },
+      "assembly": {
+        "description": "Assembly operations",
+        "commands": {
+          "create": {
+            "fn": "Create assembly",
+            "args": [
+              "--name STR",
+              "--type A2PLUS|A4|ASM3"
+            ],
+            "ret": "name",
+            "ex": "fc assembly create --name Main --json"
+          },
+          "add": {
+            "fn": "Add part",
+            "args": [
+              "--assembly STR",
+              "--object STR"
+            ],
+            "ret": "status",
+            "ex": "fc assembly add --assembly Main --object Base --json"
+          },
+          "remove": {
+            "fn": "Remove part",
+            "args": [
+              "--assembly STR",
+              "--object STR"
+            ],
+            "ret": "status",
+            "ex": "fc assembly remove --assembly Main --object Base --json"
+          },
+          "constraint": {
+            "fn": "Add constraint",
+            "args": [
+              "--type COINCIDENT|PARALLEL|DISTANCE|ANGLE|AXIAL|PLANE",
+              "--obj1 STR",
+              "--obj2 STR",
+              "--value FLOAT"
+            ],
+            "ret": "constraint info",
+            "ex": "fc assembly constraint --type coincident --obj1 Base --obj2 Pillar --json"
+          },
+          "solve": {
+            "fn": "Solve constraints",
+            "args": [
+              "--assembly STR"
+            ],
+            "ret": "solve status",
+            "ex": "fc assembly solve --assembly Main --json"
+          },
+          "explode": {
+            "fn": "Exploded view",
+            "args": [
+              "--factor FLOAT",
+              "--direction X|Y|Z"
+            ],
+            "ret": "exploded info",
+            "ex": "fc assembly explode --factor 10 --direction z --json"
+          },
+          "animate": {
+            "fn": "Animation",
+            "args": [
+              "--start FLOAT",
+              "--end FLOAT",
+              "--steps INT"
+            ],
+            "ret": "animation info",
+            "ex": "fc assembly animate --start 0 --end 100 --steps 50 --json"
+          },
+          "list": {
+            "fn": "List parts",
+            "args": [
+              "--assembly STR"
+            ],
+            "ret": "part list",
+            "ex": "fc assembly list --assembly Main --json"
+          },
+          "ground": {
+            "fn": "Ground part",
+            "args": [
+              "--assembly STR",
+              "--object STR"
+            ],
+            "ret": "status",
+            "ex": "fc assembly ground --assembly Main --object Base --json"
+          },
+          "show": {
+            "fn": "Show tree",
+            "args": [
+              "--assembly STR"
+            ],
+            "ret": "tree",
+            "ex": "fc assembly show --assembly Main --json"
+          }
+        }
+      },
+      "fem": {
+        "description": "FEM analysis",
+        "commands": {
+          "analysis": {
+            "fn": "Create analysis",
+            "args": [
+              "--name STR"
+            ],
+            "ret": "name",
+            "ex": "fc fem analysis --name SA --json"
+          },
+          "mesh": {
+            "fn": "Create mesh",
+            "args": [
+              "--analysis STR",
+              "--object STR",
+              "--max-size FLOAT",
+              "--min-size FLOAT"
+            ],
+            "ret": "mesh info",
+            "ex": "fc fem mesh --analysis SA --object Part --max-size 5 --json"
+          },
+          "material": {
+            "fn": "Assign material",
+            "args": [
+              "--analysis STR",
+              "--material STR",
+              "--object STR"
+            ],
+            "ret": "status",
+            "ex": "fc fem material --analysis SA --material Steel --object Part --json"
+          },
+          "constraint": {
+            "fn": "Boundary condition",
+            "args": [
+              "--analysis STR",
+              "--type FIXED|FORCE|PRESSURE|DISPLACEMENT|GRAVITY",
+              "--object STR",
+              "--value FLOAT"
+            ],
+            "ret": "constraint info",
+            "ex": "fc fem constraint --analysis SA --type fixed --object Part --json"
+          },
+          "force": {
+            "fn": "Apply force",
+            "args": [
+              "--analysis STR",
+              "--object STR",
+              "--force x,y,z"
+            ],
+            "ret": "status",
+            "ex": "fc fem force --analysis SA --object Part --force 0,0,-1000 --json"
+          },
+          "solve": {
+            "fn": "Run solver",
+            "args": [
+              "--analysis STR",
+              "--solver CALCULIX|ELMER|Z88",
+              "--timeout INT"
+            ],
+            "ret": "solve result",
+            "ex": "fc fem solve --analysis SA --solver calculix --json"
+          },
+          "result": {
+            "fn": "Show results",
+            "args": [
+              "--analysis STR",
+              "--type STRESS|DISPLACEMENT|STRAIN|ALL"
+            ],
+            "ret": "result data",
+            "ex": "fc fem result --analysis SA --type stress --json"
+          },
+          "list": {
+            "fn": "List objects",
+            "args": [
+              "--analysis STR"
+            ],
+            "ret": "FEM objects",
+            "ex": "fc fem list --analysis SA --json"
+          }
+        }
+      },
+      "cam": {
+        "description": "CAM operations",
+        "commands": {
+          "job": {
+            "fn": "Create job",
+            "args": [
+              "--name STR",
+              "--model STR",
+              "--template STR"
+            ],
+            "ret": "job name",
+            "ex": "fc cam job --name J1 --model Part --json"
+          },
+          "tool": {
+            "fn": "Define tool",
+            "args": [
+              "--type ENDMILL|BALLMILL|DRILL",
+              "--diameter FLOAT",
+              "--length FLOAT",
+              "--speed FLOAT",
+              "--feed FLOAT",
+              "--name STR"
+            ],
+            "ret": "tool name",
+            "ex": "fc cam tool --type endmill --diameter 6 --length 50 --name EM6 --json"
+          },
+          "toolpath": {
+            "fn": "Generate toolpath",
+            "args": [
+              "--job STR",
+              "--type PROFILE|POCKET|DRILL|ADAPTIVE",
+              "--depth FLOAT",
+              "--step-down FLOAT"
+            ],
+            "ret": "toolpath info",
+            "ex": "fc cam toolpath --job J1 --type profile --depth 10 --json"
+          },
+          "postprocess": {
+            "fn": "Export G-code",
+            "args": [
+              "--job STR",
+              "--output PATH",
+              "--post STR"
+            ],
+            "ret": "file path",
+            "ex": "fc cam postprocess --job J1 --output out.nc --post linuxcnc --json"
+          },
+          "simulate": {
+            "fn": "Simulate",
+            "args": [
+              "--job STR",
+              "--step FLOAT"
+            ],
+            "ret": "simulation info",
+            "ex": "fc cam simulate --job J1 --step 0.1 --json"
+          },
+          "list": {
+            "fn": "List objects",
+            "args": [
+              "--job STR"
+            ],
+            "ret": "CAM objects",
+            "ex": "fc cam list --job J1 --json"
+          },
+          "show": {
+            "fn": "Show job",
+            "args": [
+              "job STR"
+            ],
+            "ret": "job details",
+            "ex": "fc cam show J1 --json"
+          }
+        }
+      }
+    },
+    "error_codes": {
+      "NOT_FOUND": {
+        "meaning": "Object or file not found",
+        "recovery": "Check name or path"
+      },
+      "CREATE_FAILED": {
+        "meaning": "Creation failed",
+        "recovery": "Check parameters, ensure document open"
+      },
+      "OPEN_FAILED": {
+        "meaning": "File open failed",
+        "recovery": "Check path and format"
+      },
+      "SAVE_FAILED": {
+        "meaning": "Save failed",
+        "recovery": "Check output path is writable"
+      },
+      "NO_PATH": {
+        "meaning": "No path specified",
+        "recovery": "Provide --output PATH"
+      },
+      "EXPORT_FAILED": {
+        "meaning": "Export failed",
+        "recovery": "Check path, ensure objects exist"
+      },
+      "IMPORT_FAILED": {
+        "meaning": "Import failed",
+        "recovery": "Check path and format"
+      },
+      "FILE_EXISTS": {
+        "meaning": "File exists",
+        "recovery": "Use --overwrite"
+      },
+      "FILE_NOT_FOUND": {
+        "meaning": "File not found",
+        "recovery": "Verify path"
+      },
+      "INVALID_NAME": {
+        "meaning": "Invalid name",
+        "recovery": "Use alphanumeric + hyphen + underscore"
+      },
+      "INVALID_TYPE": {
+        "meaning": "Unknown type",
+        "recovery": "Check supported types"
+      },
+      "BOOLEAN_FAILED": {
+        "meaning": "Boolean failed",
+        "recovery": "Ensure objects overlap"
+      },
+      "FILLET_FAILED": {
+        "meaning": "Fillet failed",
+        "recovery": "Check radius and edges"
+      },
+      "CHAMFER_FAILED": {
+        "meaning": "Chamfer failed",
+        "recovery": "Check size and edges"
+      },
+      "MIRROR_FAILED": {
+        "meaning": "Mirror failed",
+        "recovery": "Check object has Shape"
+      },
+      "SCALE_FAILED": {
+        "meaning": "Scale failed",
+        "recovery": "Check factor is valid"
+      },
+      "PAD_FAILED": {
+        "meaning": "Pad failed",
+        "recovery": "Check body and sketch exist"
+      },
+      "UNDO_FAILED": {
+        "meaning": "Undo failed",
+        "recovery": "May be nothing to undo"
+      },
+      "REDO_FAILED": {
+        "meaning": "Redo failed",
+        "recovery": "May be nothing to redo"
+      },
+      "SNAPSHOT_FAILED": {
+        "meaning": "Snapshot failed",
+        "recovery": "Ensure --project is set"
+      },
+      "RESTORE_FAILED": {
+        "meaning": "Restore failed",
+        "recovery": "Check snapshot name"
+      },
+      "NO_PROJECT": {
+        "meaning": "Requires project",
+        "recovery": "Use --project PATH"
+      },
+      "EXEC_FAILED": {
+        "meaning": "Execution failed",
+        "recovery": "Check code syntax"
+      },
+      "MISSING_ARGUMENT": {
+        "meaning": "Missing argument",
+        "recovery": "Add required argument"
+      },
+      "CONNECTION_ERROR": {
+        "meaning": "Connection failed",
+        "recovery": "Start FreeCAD with RPC addon"
+      },
+      "TIMEOUT": {
+        "meaning": "Timed out",
+        "recovery": "Increase --timeout"
+      }
+    },
+    "gui_to_cli_mapping": {
+      "Create a box": "fc part add box --name Box --param Length=20 --param Width=15 --param Height=10 --json",
+      "Create a cylinder": "fc part add cylinder --name Cyl --param Radius=5 --param Height=20 --json",
+      "Create a sphere": "fc part add sphere --name Sph --param Radius=8 --json",
+      "Create a cone": "fc part add cone --name Con --param Radius1=10 --param Radius2=3 --param Height=15 --json",
+      "Boolean union (fuse)": "fc part boolean fuse Box Cyl --name Fused --json",
+      "Boolean cut (subtract)": "fc part boolean cut Box Cyl --name Cut --json",
+      "Boolean intersection": "fc part boolean common Box Cyl --name Common --json",
+      "Export to STEP": "fc export step --output model.step --overwrite --json",
+      "Export to STL": "fc export stl --output model.stl --tolerance 0.05 --overwrite --json",
+      "Save project": "fc document save --output project.FCStd --json",
+      "Show document info": "fc document info --json",
+      "Create a sketch on XY plane": "fc sketch new --name MySketch --plane XY --json",
+      "Add a circle to sketch": "fc sketch add-circle MySketch --center 0,0 --radius 10 --json",
+      "Pad a sketch": "fc body pad Body Sketch --length 20 --json",
+      "Create a pocket": "fc body pocket Body Sketch --length 5 --json",
+      "Add a fillet": "fc part fillet-3d Box --radius 2 --json",
+      "Add a chamfer": "fc part chamfer-3d Box --size 1.5 --json",
+      "Mirror a part": "fc part mirror Box --plane XY --name BoxMirrored --json",
+      "Scale a part": "fc part scale Box 1.5 --json",
+      "Create a hole": "fc part hole Box --diameter 8 --depth 10 --json",
+      "Undo last operation": "fc session undo --json",
+      "Create a snapshot": "fc session snapshot v1.0 --description Initial --json",
+      "Create a TechDraw page": "fc techdraw page --name Page1 --format A3 --json",
+      "Add a view to page": "fc techdraw view --page Page1 --source Box --direction 0,0,1 --scale 1.0 --json",
+      "Create a spreadsheet": "fc spreadsheet create --name Params --json",
+      "Set a parameter": "fc spreadsheet set --sheet Params --cell A1 --value 100 --json",
+      "Assign material": "fc material assign --object Box --material Steel --json",
+      "Create FEM analysis": "fc fem analysis --name StaticAnalysis --json",
+      "Create CAM job": "fc cam job --name Job1 --json",
+      "Import a STEP file": "fc import step --path model.step --json",
+      "Execute custom Python": "fc execute code --json"
+    }
+  }
+}

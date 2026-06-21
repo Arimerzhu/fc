@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fc-mcp"
+version = "0.1.0"
+description = "FreeCAD MCP Server — Model Context Protocol integration"
+requires-python = ">=3.12"
+dependencies = [
+    "fc-core",
+    "fc-cli",
+    "mcp[cli]>=1.12.2",
+]
+
+[project.scripts]
+fc-mcp = "fc_mcp.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fc_mcp"]

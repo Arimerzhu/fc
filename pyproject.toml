@@ -1,0 +1,55 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fc"
+version = "0.9.0"
+description = "Agent Native FreeCAD CLI — 世界上最完整的 AI Agent 友好的 FreeCAD 命令行工具"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.12"
+dependencies = [
+    "click>=8.1.0",
+    "pydantic>=2.0.0",
+    "pyyaml>=6.0.0",
+    "rich>=13.0.0",
+    "mcp[cli]>=1.12.2",
+]
+
+[project.scripts]
+fc = "fc_cli.main:cli"
+
+[tool.hatch.build.targets.wheel]
+packages = [
+    "packages/core/src/fc_core",
+    "packages/cli/src/fc_cli",
+    "packages/mcp/src/fc_mcp",
+    "packages/runtime/src/fc_runtime",
+]
+
+[tool.uv.workspace]
+members = [
+    "packages/core",
+    "packages/cli",
+    "packages/mcp",
+    "packages/runtime",
+    "packages/test",
+]
+
+[tool.pytest.ini_options]
+# Note: CLI and MCP tests have their own conftest.py with different fixtures.
+# Run them separately: pytest packages/cli/tests/ or pytest packages/mcp/tests/
+testpaths = [
+    "packages/core/tests",
+    "packages/runtime/tests",
+]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]

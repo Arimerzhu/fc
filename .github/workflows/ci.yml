@@ -1,0 +1,103 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  # ── Lint ──
+  lint:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - run: uv sync
+      - run: uv run ruff check packages/
+      - run: uv run ruff format --check packages/
+
+  # ── Unit Tests (no FreeCAD required) ──
+  unit-tests:
+    name: Unit Tests (${{ matrix.os }}, Python ${{ matrix.python-version }})
+    needs: lint
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: uv sync --all-packages
+
+      - name: Run core tests (excl. E2E)
+        run: uv run python -m pytest packages/core/tests/ -q --ignore=packages/core/tests/test_integration_e2e.py --ignore=packages/core/tests/test_e2e_agent.py
+
+      - name: Run CLI tests
+        run: uv run python -m pytest packages/cli/tests/ -q
+
+      - name: Run MCP tests
+        run: uv run python -m pytest packages/mcp/tests/ -q
+
+      - name: Run runtime tests
+        run: uv run python -m pytest packages/runtime/tests/ -q
+
+  # ── Integration Tests (requires FreeCAD, Windows only) ──
+  integration-tests:
+    name: Integration Tests (FreeCAD)
+    needs: unit-tests
+    runs-on: windows-latest
+    # Only run on push to main/master, not on every PR (to save CI minutes)
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install FreeCAD
+        run: |
+          choco install freecad --yes
+          echo "C:\Program Files\FreeCAD 1.1\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+
+      - name: Verify FreeCAD
+        run: |
+          & "C:\Program Files\FreeCAD 1.1\bin\FreeCADCmd.exe" --version
+
+      - name: Install dependencies
+        run: uv sync --all-packages
+
+      - name: Run integration tests
+        run: |
+          uv run python -m pytest packages/core/tests/test_integration_e2e.py -q -v
+
+      - name: Run E2E agent tests
+        run: |
+          uv run python -m pytest packages/core/tests/test_e2e_agent.py -q -v
+
+  # ── Documentation Build ──
+  docs:
+    name: Documentation Build
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - run: uv sync --all-packages
+      - run: uv run pip install mkdocs mkdocs-material
+      - run: uv run mkdocs build --strict
+      - name: Upload docs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs
+          path: site/

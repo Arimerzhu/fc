@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fc-cli"
+version = "0.1.0"
+description = "FreeCAD CLI — Command-line interface with 258+ commands"
+requires-python = ">=3.12"
+dependencies = [
+    "fc-core",
+    "click>=8.1.0",
+    "rich>=13.0.0",
+]
+
+[project.scripts]
+fc = "fc_cli.main:cli"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fc_cli"]

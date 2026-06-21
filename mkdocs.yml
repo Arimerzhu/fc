@@ -1,0 +1,97 @@
+site_name: fc — Agent Native FreeCAD CLI
+site_description: AI Agent 操作 FreeCAD 的完整 CLI 工具
+site_author: ZOO
+
+docs_dir: docs_mkdocs
+
+theme:
+  name: material
+  language: zh
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: 切换到暗色模式
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: 切换到亮色模式
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+plugins:
+  - search:
+      lang: zh
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - 首页: docs/index.md
+  - 快速入门: docs/getting-started.md
+  - 安装指南: docs/installation.md
+  - 命令参考:
+    - 总览: docs/commands/index.md
+    - Document: docs/commands/document.md
+    - Part: docs/commands/part.md
+    - Sketch: docs/commands/sketch.md
+    - Body: docs/commands/body.md
+    - Export: docs/commands/export.md
+    - Import: docs/commands/import.md
+    - Session: docs/commands/session.md
+    - Execute: docs/commands/execute.md
+    - Mesh: docs/commands/mesh.md
+    - Draft: docs/commands/draft.md
+    - Surface: docs/commands/surface.md
+    - TechDraw: docs/commands/techdraw.md
+    - Spreadsheet: docs/commands/spreadsheet.md
+    - Material: docs/commands/material.md
+    - Assembly: docs/commands/assembly.md
+    - FEM: docs/commands/fem.md
+    - CAM: docs/commands/cam.md
+  - AI Agent 集成:
+    - AI 使用指南: docs/agent/ai-guide.md
+    - Skill 索引: docs/agent/skills-index.md
+    - 五阶段执行流: docs/agent/execution-flow.md
+    - 命令历史上下文注入: docs/agent/context-injection.md
+    - 错误闭环自动学习: docs/agent/error-rules.md
+    - Function Calling Schema: docs/agent/function-calling.md
+    - 示例库:
+      - 简单：底板通孔: docs/examples/01_simple_box_with_hole.md
+      - 中等：安装支架: docs/examples/02_mounting_bracket.md
+      - 中等：装配体: docs/examples/03_simple_assembly.md
+      - 中等：参数化设计: docs/examples/04_parametric_design.md
+      - 复杂：完整工作流: docs/examples/05_full_workflow.md
+  - MCP 配置: docs/mcp.md
+  - API 文档: docs/api.md
+  - 架构设计: docs/architecture.md
+  - 路线图: docs/roadmap.md
+  - 决策记录: docs/decisions.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/zoo/fc
+  version:
+    provider: mike

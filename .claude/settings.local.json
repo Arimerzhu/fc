@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"D:\\\\桌面文件\\\\fc\" -Recurse -Depth 2)",
+      "Bash(Select-Object FullName, Length, LastWriteTime)",
+      "Bash(Format-Table -AutoSize)",
+      "Bash(python -m pytest packages/core/tests/ -v --tb=short)",
+      "Bash(python -m pytest packages/runtime/tests/ -v --tb=short)",
+      "Bash(python -c \"from fc_cli.main import cli; print\\('CLI imports OK'\\)\")",
+      "Bash(Get-Content \"C:\\\\Users\\\\Lenovo\\\\.claude\\\\teams\\\\fc-team\\\\config.json\")",
+      "Bash(python -m json.tool)",
+      "Bash(python -m fc_cli --help)",
+      "Bash(fc --help)",
+      "Bash(fc agent *)",
+      "Bash(where freecadcmd *)",
+      "Read(//c/Program Files/**)",
+      "Read(//c/Program Files \\(x86\\)/**)",
+      "Bash(where freecad *)",
+      "Bash(where FreeCADCmd)",
+      "Bash(where FreeCADCmd.exe)",
+      "Read(//d/Program Files/**)",
+      "Read(//d/Users/**)",
+      "Bash(find \"/d\" -name \"FreeCADCmd.exe\")",
+      "Bash(\"C:/Program Files/FreeCAD 1.1/bin/FreeCADCmd.exe\" --version)",
+      "Bash(mkdir -p \"D:/桌面文件/fc_output\")",
+      "Bash(mkdir \"D:/桌面文件/fc_output\")"
+    ]
+  }
+}
